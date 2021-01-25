@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+#gio added 
+.idea
+
 # Distribution / packaging
 .Python
 build/

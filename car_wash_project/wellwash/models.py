@@ -60,3 +60,9 @@ class Order(models.Model):
 
     def get_quantity_closed(self):
         pass
+
+    def create_order(self):
+        pass
+
+    def close_order(self):
+        pass

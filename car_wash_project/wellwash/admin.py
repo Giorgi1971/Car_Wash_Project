@@ -1,6 +1,6 @@
 # Register your models here.
 from django.contrib import admin
-from wellwash.models import WashObject, WashBox, WashWasher, Cars, Order, Location
+from .models import WashObject, WashBox, WashWasher, Cars, Order, Location
 
 
 # class StoreToBookInline(admin.TabularInline):

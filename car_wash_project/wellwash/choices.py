@@ -3,12 +3,6 @@ from django.db import models
 
 
 class TypeChoices(IntegerChoices):
-    '''(
-        (1, 'Male',),
-        (2, 'Female',),
-        (3, 'Other1',),
-        )
-    '''
     Sedan = 10
     Jip = 12
     Mini = 8

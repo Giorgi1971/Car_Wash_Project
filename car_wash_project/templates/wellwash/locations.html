@@ -6,9 +6,21 @@
 </head>
 <body>
 
-<p>Hello</p>
+<p>Hello, this is our locations list. choose one for You:</p>
+{% if cont %}
+    <ul>
+        {% for loc in cont %}
+        <li>
+            <a href="/wellwash/locations/{{loc.id}}/boxes/">
+            {{ loc.title }}  -  {{ loc.location.city }}. {{loc.location.street_address}}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No Cars are available.</p>
+{% endif %}
 
-{{ cont }}
 
 </body>
 </html>

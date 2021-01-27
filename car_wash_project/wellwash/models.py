@@ -8,7 +8,8 @@ class Location(models.Model):
     zip = models.CharField(max_length=4)
 
     def __str__(self):
-        return f'{self.city} : {self.street_address}: {self.zip}'
+        return self.street_address
+        # return f'{self.city} : {self.street_address}: {self.zip}'
 
 
 class WashObject(models.Model):
@@ -56,7 +57,7 @@ class Order(models.Model):
     status = models.PositiveSmallIntegerField("Statuses", choices=StatusChoices.choices, default=StatusChoices.open)
 
     def __str__(self):
-        return f'{self.pk} - {self.status}'
+        return f'{self.pk} - {self.washer} - {self.washing_box} - {self.washing_car}- {self.status}- {self.start_time}'
 
     def get_quantity_closed(self):
         pass
@@ -88,7 +89,7 @@ class Order(models.Model):
 #         max_length=2,
 #         choices=YEAR_IN_SCHOOL_CHOICES,
 #         default=FRESHMAN,
-#     )
+#     )or1
 #
 #     def __str__(self):
 #         return self.year_in_school

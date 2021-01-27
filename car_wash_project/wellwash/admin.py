@@ -22,6 +22,9 @@ from .models import *
 #     inlines = [StoreToBookInline]
 #     filter_horizontal = ('author',)
 
+# ეს უფრო მარტივი რატომ არაა:
+# admin.site.register(Question)
+
 
 @admin.register(WashObject)
 class WashObjectModelAdmin(admin.ModelAdmin):

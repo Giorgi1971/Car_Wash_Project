@@ -56,7 +56,7 @@ ROOT_URLCONF = 'car_wash_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / Path('templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -1,6 +1,6 @@
 # Register your models here.
 from django.contrib import admin
-from .models import WashObject, WashBox, WashWasher, Cars, Order, Location
+from .models import *
 
 
 # class StoreToBookInline(admin.TabularInline):
@@ -51,3 +51,7 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
     pass
+
+# @admin.register(Student)
+# class StudentObjectModelAdmin(admin.ModelAdmin):
+#     pass

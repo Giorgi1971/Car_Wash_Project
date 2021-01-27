@@ -1,5 +1,4 @@
 # Create your models here.
-from django.db import models
 from .choices import *
 
 
@@ -39,24 +38,25 @@ class WashWasher(models.Model):
 
 
 class Cars(models.Model):
-    cars_model = models.CharField(max_length=255)
-    cars_number = models.CharField(max_length=255)
+    cars_model = models.CharField(max_length=255, default="bmw")
+    cars_number = models.CharField(max_length=255, default='aaa-111')
     cars_type = models.PositiveSmallIntegerField("CarType", choices=TypeChoices.choices, default=TypeChoices.Sedan)
+    cars_color = models.PositiveSmallIntegerField('Color', choices=ColorChoices.choices, default=ColorChoices.White)
 
     def __str__(self):
-        return f'{self.cars_model} : {self.cars_number}'
+        return f'{self.cars_model} : {self.cars_number}: {self.cars_type}'
 
 
 class Order(models.Model):
-    washers = models.ManyToManyField(to='wellwash.WashWasher', related_name='order_name')
-    washed_car = models.ManyToManyField(to='wellwash.Cars', related_name='order_name')
-    box_ordered = models.ManyToManyField(to='wellwash.WashBox', related_name='order_name')
+    washer = models.ForeignKey(WashWasher, on_delete=models.PROTECT, related_name='show_ord')
+    washing_box = models.ForeignKey(WashBox, on_delete=models.PROTECT, related_name='show_ordd')
+    washing_car = models.ForeignKey(Cars, on_delete=models.PROTECT, related_name='show_orddd')
     start_time = models.DateTimeField(verbose_name="Begin time", blank=True,)
     end_time = models.DateTimeField(verbose_name="End time", blank=True)
-    status = models.CharField(max_length=24, default=None)
+    status = models.PositiveSmallIntegerField("Statuses", choices=StatusChoices.choices, default=StatusChoices.open)
 
     def __str__(self):
-        return f'{self.pk} - {self}'
+        return f'{self.pk} - {self.status}'
 
     def get_quantity_closed(self):
         pass
@@ -66,3 +66,32 @@ class Order(models.Model):
 
     def close_order(self):
         pass
+
+    def wash_price(self, pk):
+        pass
+
+
+# class Student(models.Model):
+#     FRESHMAN = 'FR'
+#     SOPHOMORE = 'SO'
+#     JUNIOR = 'JR'
+#     SENIOR = 'SR'
+#     GRADUATE = 'GR'
+#     YEAR_IN_SCHOOL_CHOICES = [
+#         (FRESHMAN, 'Freshman'),
+#         (SOPHOMORE, 'Sophomore'),
+#         (JUNIOR, 'Junior'),
+#         (SENIOR, 'Senior'),
+#         (GRADUATE, 'Graduate'),
+#     ]
+#     year_in_school = models.CharField(
+#         max_length=2,
+#         choices=YEAR_IN_SCHOOL_CHOICES,
+#         default=FRESHMAN,
+#     )
+#
+#     def __str__(self):
+#         return self.year_in_school
+#
+#     def is_upperclass(self):
+#         return self.year_in_school in {self.JUNIOR, self.SENIOR}

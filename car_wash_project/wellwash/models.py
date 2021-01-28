@@ -53,6 +53,7 @@ class Order(models.Model):
     washer = models.ForeignKey(WashWasher, on_delete=models.PROTECT, related_name='show_ord')
     washing_box = models.ForeignKey(WashBox, on_delete=models.PROTECT, related_name='show_ordd')
     washing_car = models.ForeignKey(Cars, on_delete=models.PROTECT, related_name='show_orddd')
+    order_time = models.DateTimeField(verbose_name="Order time", blank=False,)
     start_time = models.DateTimeField(verbose_name="Begin time", blank=True,)
     end_time = models.DateTimeField(verbose_name="End time", blank=True)
     status = models.PositiveSmallIntegerField("Statuses", choices=StatusChoices.choices, default=StatusChoices.open)

@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
@@ -36,8 +36,8 @@ def car_type(request):
 
 def car(request):
     latest_cars_list = Cars.objects.all()[:10]
-    output = ', '.join([c.cars_number for c in latest_cars_list])
-    return HttpResponse(output)
+    data = [{"car": cc.cars_number} for cc in latest_cars_list]
+    return JsonResponse(data, safe=False)
 
 
 def washer(request):

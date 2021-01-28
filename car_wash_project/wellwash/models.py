@@ -1,5 +1,6 @@
 # Create your models here.
 from .choices import *
+from django.db import models
 
 
 class Location(models.Model):
@@ -21,7 +22,7 @@ class WashObject(models.Model):
 
 
 class WashBox(models.Model):
-    wash_object = models.ForeignKey(WashObject, on_delete=models.CASCADE, related_name='box')
+    wash_object = models.ForeignKey(WashObject, on_delete=models.CASCADE, related_name='giorgi')
     box_status = models.CharField(max_length=255)
     box_code = models.CharField(max_length=24, unique=True)
 

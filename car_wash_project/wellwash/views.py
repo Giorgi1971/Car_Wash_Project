@@ -17,15 +17,26 @@ def locations(request):
 
 
 def location(request, location_id):
-    boxes = get_object_or_404(WashObject, pk=location_id)
-    free_boxes = boxes.box
+    free_boxes = get_object_or_404(WashObject, pk=location_id).giorgi.filter(box_status='free')
     cont = {'cont': free_boxes}
     return render(request, 'wellwash/boxes.html', cont)
 
 
+def box(request, box_id):
+    free_boxes = get_object_or_404(WashBox, pk=box_id)
+    cont = {'cont': free_boxes}
+    return render(request, 'wellwash/box.html', cont)
+
+
+def car_type(request):
+    enter_car = Cars.objects.all()
+    cont = {'cont': enter_car}
+    return render(request, 'wellwash/car.html', cont)
+
+
 def car(request):
     latest_cars_list = Cars.objects.all()[:10]
-    output = ', '.join([c for c in latest_cars_list])
+    output = ', '.join([c.cars_number for c in latest_cars_list])
     return HttpResponse(output)
 
 

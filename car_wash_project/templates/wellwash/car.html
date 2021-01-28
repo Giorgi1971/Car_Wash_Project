@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car</title>
+</head>
+<body>
+{{ cont.cars_type.all }}
+<form action="{% url 'wellwash:order' %}" method="post">
+{% csrf_token %}
+    <label>car_model</label><br>
+    <input type="text" name="car_model"><br>
+
+    <label>cars_number</label><br>
+    <input type="text" name="car_model"><br>
+
+    <label>cars_type</label><br>
+    <fieldset> <legend>აირჩიეთ მანქანის ტიპი (გარეცხვის ფასი):</legend>
+        <input type="radio" name="car_type" id="car_type{{ forloop.counter }}" value="{{choice}}" checked>
+                <label for="car_type{{ forloop.counter }}">{{choice}}</label><br/>
+    </fieldset>
+        <input type="checkbox" name="choice" id="info{{ forloop.counter }}" value="მეგობრებისგან"> <label for="info{{ forloop.counter }}">მეგობრებისგან</label><br/>
+    </fieldset>
+    <label>cars_color</label><br>
+    <input type="text" name="car_model"><br>
+
+
+    <input type="submit" value="submit">
+</form>
+</body>
+</html>

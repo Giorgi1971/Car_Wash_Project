@@ -5,9 +5,24 @@
     <title>Boxes</title>
 </head>
 <body>
-<h2>{{ cont }}</h2>
+<h4>Free Boxes: </h4>
 
-<h4>Free Boxes</h4>
+{% if cont %}
+    <ul>
+        {% for c in cont %}
+        <li>
+            <a href="{% url 'wellwash:box' c.id %}">
+            box {{ c.pk }}  -  {{ c.box_code }} - {{c.box_status}}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No Boxes are available.</p>
+{% endif %}
+
+<p>Please, choose one.</p>
+
 
 </body>
 </html>

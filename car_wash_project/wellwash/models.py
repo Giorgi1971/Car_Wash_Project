@@ -22,7 +22,7 @@ class WashObject(models.Model):
 
 
 class WashBox(models.Model):
-    wash_object = models.ForeignKey(WashObject, on_delete=models.CASCADE, related_name='sow_boxes')
+    wash_object = models.ForeignKey(WashObject, on_delete=models.CASCADE, related_name='show_boxes')
     box_status = models.CharField(max_length=255)
     box_code = models.CharField(max_length=24, unique=True)
 

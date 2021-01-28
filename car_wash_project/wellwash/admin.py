@@ -25,6 +25,10 @@ from .models import *
 # ეს უფრო მარტივი რატომ არაა:
 # admin.site.register(Question)
 
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    fields = ['end_time', 'status']
+
 
 @admin.register(WashObject)
 class WashObjectModelAdmin(admin.ModelAdmin):
@@ -46,14 +50,10 @@ class CarsAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    pass
-
-
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
     pass
+
 
 # @admin.register(Student)
 # class StudentObjectModelAdmin(admin.ModelAdmin):

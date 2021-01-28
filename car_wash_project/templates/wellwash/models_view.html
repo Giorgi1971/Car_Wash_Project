@@ -3,23 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Branches</title>
+    {% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'wellwash/style.css' %}">
 </head>
 <body>
 
 
-<h3>Hello Branches</h3>
-{{ washobject }}
+<h3>Hello Branch {{ washobject }} !</h3>
+<p>{{ washobject.location }}</p>
+
 <hr>
 {{ washobject.show_washers.all }}<br>
-{% for box in washobject.show_washers.all %}
-{{box}}
+<ul>
+{% for bb in washobject.show_washers.all %}
+    <li>{{ bb }}</li>
 {% endfor %}
+</ul>
 <hr>
 {{ washobject.sow_boxes.all }}<br>
-{% for box in washobject.sow_boxes.all %}
-{{box.box_code}}<br>
+<ul>
+{% for box in washobject.show_boxes.all %}
+<li><a>{{ box.box_code }}</a></li><br>
 {% endfor %}
-
+</ul>
 <hr>
 {{ washobject }}
 

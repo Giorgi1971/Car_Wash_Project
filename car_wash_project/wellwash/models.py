@@ -9,8 +9,8 @@ class Location(models.Model):
     zip = models.CharField(max_length=4)
 
     def __str__(self):
-        return self.street_address
-        # return f'{self.city} : {self.street_address}: {self.zip}'
+        # return self.street_address
+        return f'{self.city}.  {self.street_address}'
 
 
 class WashObject(models.Model):
@@ -22,12 +22,12 @@ class WashObject(models.Model):
 
 
 class WashBox(models.Model):
-    wash_object = models.ForeignKey(WashObject, on_delete=models.CASCADE, related_name='giorgi')
+    wash_object = models.ForeignKey(WashObject, on_delete=models.CASCADE, related_name='sow_boxes')
     box_status = models.CharField(max_length=255)
     box_code = models.CharField(max_length=24, unique=True)
 
     def __str__(self):
-        return f'box# {self.box_code}  -   {self.wash_object}'
+        return f'{self.box_code}  from -  {self.wash_object}'
 
 
 class WashWasher(models.Model):

@@ -2,20 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Models_different</title>
+    <title>Branches</title>
 </head>
 <body>
-<h3>Hello</h3>
-<!--<h1>{{ cars }}</h1>-->
-<!--{% csrf_token %}-->
-<!--<ul>-->
-<!--{% for choice in question.choice_set.all %}-->
-<!--    <li>{{ choice.choice_text }} &#45;&#45; {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>-->
-<!--{% endfor %}-->
-<!--</ul>-->
 
-<!--<a href="{% url 'polls:detail' question.id %}">Vote again?</a>-->
 
+<h3>Hello Branches</h3>
+{{ washobject }}
+<hr>
+{{ washobject.show_washers.all }}<br>
+{% for box in washobject.show_washers.all %}
+{{box}}
+{% endfor %}
+<hr>
+{{ washobject.sow_boxes.all }}<br>
+{% for box in washobject.sow_boxes.all %}
+{{box.box_code}}<br>
+{% endfor %}
+
+<hr>
+{{ washobject }}
 
 </body>
 </html>

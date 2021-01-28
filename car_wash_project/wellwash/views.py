@@ -6,7 +6,16 @@ from django.views import generic
 from .models import WashObject, WashBox, WashWasher, Cars, Order, Location
 
 
-def index(request):
+class IndexView(generic.ListView):
+    template_name = 'wellwash/index.html'
+    context_object_name = 'Wash_branch'
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return WashObject.objects.all()
+
+
+def index1(request):
     return HttpResponse("<h3>Welcome 'Well Wash'</h3><a href='locations'>locations</a><hr><a href='car'>cars</a>")
 
 

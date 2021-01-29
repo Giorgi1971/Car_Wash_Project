@@ -40,8 +40,8 @@ class WashWasher(models.Model):
 
 
 class Cars(models.Model):
-    cars_model = models.CharField(max_length=255, default="bmw")
-    cars_number = models.CharField(max_length=255, default='aaa-111')
+    cars_model = models.CharField(max_length=255, default="BMW")
+    cars_number = models.CharField(max_length=255, default='BMW-111', unique=True)
     cars_type = models.PositiveSmallIntegerField("CarType", choices=TypeChoices.choices, default=TypeChoices.Sedan)
     cars_color = models.PositiveSmallIntegerField('Color', choices=ColorChoices.choices, default=ColorChoices.White)
 
@@ -50,16 +50,16 @@ class Cars(models.Model):
 
 
 class Order(models.Model):
-    washer = models.ForeignKey(WashWasher, on_delete=models.PROTECT, related_name='show_ord')
-    washing_box = models.ForeignKey(WashBox, on_delete=models.PROTECT, related_name='show_ordd')
-    washing_car = models.ForeignKey(Cars, on_delete=models.PROTECT, related_name='show_orddd')
+    washer_id = models.ForeignKey(WashWasher, on_delete=models.PROTECT, related_name='orders')
+    box_id = models.ForeignKey(WashBox, on_delete=models.PROTECT, related_name='orders')
+    car_id = models.ForeignKey(Cars, on_delete=models.PROTECT, related_name='orders')
     order_time = models.DateTimeField(verbose_name="Order time", blank=False,)
     start_time = models.DateTimeField(verbose_name="Begin time", blank=True,)
     end_time = models.DateTimeField(verbose_name="End time", blank=True)
     status = models.PositiveSmallIntegerField("Statuses", choices=StatusChoices.choices, default=StatusChoices.open)
 
     def __str__(self):
-        return f'{self.pk} - {self.washer} - {self.washing_box} - {self.washing_car}- {self.status}- {self.start_time}'
+        return f'{self.pk} - {self.washer_id.full_name} - {self.box_id} - {self.car_id.cars_number}- {self.status}- {self.end_time}'
 
     def get_quantity_closed(self):
         pass

@@ -27,12 +27,14 @@ from .models import *
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    fields = ['end_time', 'status']
+    # fields = ['end_time', 'status']
+    pass
 
 
 @admin.register(WashObject)
 class WashObjectModelAdmin(admin.ModelAdmin):
-    pass
+    fields = ['title']
+    # pass
 
 
 @admin.register(WashBox)
@@ -47,7 +49,9 @@ class WashWasherAdmin(admin.ModelAdmin):
 
 @admin.register(Cars)
 class CarsAdmin(admin.ModelAdmin):
-    pass
+    fieldsets = [
+            (None, {'fields': ['cars_model']}),
+            ('Date information', {'fields': ['cars_number']})]
 
 
 @admin.register(Location)

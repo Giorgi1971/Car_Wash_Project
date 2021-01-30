@@ -8,7 +8,7 @@ from .models import *
 #     extra = 1
 
 
-# @admin.register(WashObject)
+# @admin.register(Branch)
 # class WashObjectAdmin(admin.ModelAdmin):
 #     inlines = [WashObjectInline]
 
@@ -31,27 +31,27 @@ class OrderAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(WashObject)
+@admin.register(Branch)
 class WashObjectModelAdmin(admin.ModelAdmin):
-    fields = ['title']
-    # pass
-
-
-@admin.register(WashBox)
-class WashBoxAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(WashWasher)
+@admin.register(Box)
+class BoxAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Washer)
 class WashWasherAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Cars)
+@admin.register(Car)
 class CarsAdmin(admin.ModelAdmin):
-    fieldsets = [
-            (None, {'fields': ['cars_model']}),
-            ('Date information', {'fields': ['cars_number']})]
+    pass
+    # fieldsets = [
+    #         (None, {'fields': ['cars_model']}),
+    #         ('Date information', {'fields': ['cars_number']})]
 
 
 @admin.register(Location)

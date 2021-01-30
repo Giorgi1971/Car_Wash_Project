@@ -1,54 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Index</title>
-        <style type="text/css">
+{% extends 'wellwash/base.html' %}
 
-        li a{
-    text-decoration: none;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    width: 1000px;
-    display: block;
-    color: white;
-    background-color: rgb(90, 90, 90);
-    padding: 5px 25px;
-    text-align: center;
-    text-shadow: 0 0 10px black;
-    box-shadow: 0 0 5px rgb(150, 170, 150);
-    border: solid 1px rgb(120, 140, 120);
-}
-        </style>
-</head>
-<body>
-<h3>Welcome "Wellwash"</h3>
+{% block body %}
+<br>
+<br>
+    <div style="text-align: center;">
+        <h2>Welcome WellWash!</h2>
+        <p>This is a car wash site,
+            you can place an order and our service staff will definitely help you. Good Luck</p>
+        
+        <a href="{% url 'wellwash:order' %}" class="button large hpbottom">Get started Order!</a>
+    </div>
 
-<hr>
-<ul>
-{{ model }} ggg
-    {% for loc in Wash_branch %}
-<hr>
-<hr>
-    <li>
-        <a href="{% url 'wellwash:branch' loc.id %}">ფილიალი: {{ loc }}</a><br>
-        <a href="{% url 'wellwash:location' loc.id %}">
-            {{ loc.location }}
-        </a><br>
-        <a href="">
-            ბოქსები:
-            {% for ff in loc.show_boxes.all %}
-            {{ ff.box_code }},
-            {% endfor %}
-        </a><br>
-        <a href="">
-            Washers:
-            {% for ff in loc.show_washers.all %}
-            {{ ff.full_name }},
-            {% endfor %}
-        </a><br>
-        </li>
-    {% endfor %}
-</ul>
-</body>
-</html>
+{% endblock body %}

@@ -1,33 +1,31 @@
-from django.db.models import IntegerChoices, CharField
+from django.db.models import IntegerChoices
+from django.utils.translation import gettext_lazy as _
 
 
 class TypeChoices(IntegerChoices):
-    Sedan = 10
-    Jip = 12
-    Mini = 8
-    Tax = 5
+    Sedan = 1
+    Jip = 2
+    Mini = 3
+    Tax = 4
 
 
-class ColChoices(CharField):
-    White = 'White'
-    Blue = 'Green'
-    Green = 'Red'
-    other = "Not published"
+class CarModelChoices(IntegerChoices):
+    mercedes = 1, _('Mercedes')
+    bmw = 2, _('BMW')
+    lexus = 3, _('Lexus')
+    kia = 4, _("Kia")
+    subaru = 5, _("Subaru")
+    mazda = 6, _('Mazda')
+    skoda = 7, _('Skoda')
+    toyota = 8, _('Toyota')
+    honda = 9, _('Honda')
+    peugeot = 10, _('Peugeot')
+    volvo = 11, _('Volvo')
 
 
-class ColorChoices(IntegerChoices):
-    # (
-    # (1, 'Male',),
-    # (2, 'Female',),
-    # (3, 'Other1',),
-    # )
-    White = 1
-    Blue = 2
-    Green = 3
-    other = 4
-
-
-class StatusChoices(IntegerChoices):
-    open = 1
-    proceed = 2
-    close = 3
+# class Status(IntegerChoices):
+#         customer = 1, _("Customer")
+#         washer = 2, _("Washer")
+#         manager = 3, _("Manager")
+#
+#     status = models.PositiveSmallIntegerField(choices=Status.choices)

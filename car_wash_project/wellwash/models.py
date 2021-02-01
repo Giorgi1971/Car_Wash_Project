@@ -18,7 +18,7 @@ class Branch(models.Model):
     location_id = models.OneToOneField('wellwash.Location', on_delete=models.PROTECT, related_name='branch')
 
     def __str__(self):
-        return self.title
+        return f'{self.title} - {self.location_id}'
 
 
 class Box(models.Model):
@@ -41,7 +41,7 @@ class Washer(models.Model):
     branch_id = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='washers')
 
     def __str__(self):
-        return f'{self.full_name} - {self.id_number}'
+        return f'{self.full_name} - {self.id_number}  -  {self.branch_id}'
 
 
 class Car(models.Model):

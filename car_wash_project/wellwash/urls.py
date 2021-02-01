@@ -2,10 +2,10 @@ from django.urls import path
 from .views import *
 
 app_name = 'wellwash'
-
 urlpatterns = [
     path('', index, name='index'),
-    path('branch/', branch, name='branch'),
+    path('branches/', branches, name='branches'),
+    path('branches/<int:pk>', BranchView.as_view(), name='branch'),
     path('boxes/', box, name='box'),
     path('washers/', washer, name='washer'),
     path('order/', order, name='order'),

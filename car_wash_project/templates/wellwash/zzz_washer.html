@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <br>
+    <ul>
+        {% for each in many %}
+            <li>{{ each }}</li>
+        {% endfor %}
+    </ul>
+{% endblock body %}

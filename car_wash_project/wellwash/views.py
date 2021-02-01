@@ -10,9 +10,14 @@ def index(request):
     return render(request, 'wellwash/index.html')
 
 
-def branch(request):
-    branches = Branch.objects.all()
-    return render(request, 'wellwash/template.html', {'many': branches})
+def branches(request):
+    bs = Branch.objects.all()
+    return render(request, 'wellwash/branches.html', {'many': bs})
+
+
+class BranchView(generic.DetailView):
+    model = Branch
+    template_name = 'wellwash/branch.html'
 
 
 def box(request):
@@ -29,11 +34,6 @@ def order(request):
     orders = Order.objects.all()
     return render(request, 'wellwash/template.html', {'many': orders})
 
-
-#
-#
-#
-#
 #
 # def home(request):
 #     latest_cars_list = Car.objects.all()[:10]

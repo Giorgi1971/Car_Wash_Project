@@ -6,10 +6,10 @@ urlpatterns = [
     path('', index, name='index'),
     path('branches/', branches, name='branches'),
     path('branches/<int:pk>', BranchView.as_view(), name='branch'),
-    path('boxes/', box, name='box'),
+    # path('boxes/', box, name='box'),
     path('washers/', washer, name='washer'),
     path('order/', order, name='order'),
-
+    path('orders/', orders, name='orders'),
 
     # path('home/', home, name='home'),
     # path('car/', car, name='car'),

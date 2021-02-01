@@ -1,12 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<p>
-    gio
-</p>
-</body>
-</html>
+{% extends 'wellwash/base.html' %}
+{% load static %} 
+{% block body %}
+
+<br>
+
+        <li>{{ branch }}</li>
+
+<!-- ტექსტული ველის ფორმა - სახელი გვარი, წელი -->
+    <form action="http://localhost/web_developing/php_speqtri.php" method="POST" name="login" enctype="multipart/form-data">
+        სახელი: <BR>
+        <input type="text" name="username" placeholder="Name"><br>
+        გვარი: <BR>
+        <input type="text" name="surname" placeholder="Surname"><br>
+        მანქანის ნომერი: <BR>
+        <input type="int" name="carnumber" placeholder="მანქანის ნომერი: "><br>
+<!-- ფორმა გადამრთველი - სქესის შესახ -->
+            <hr>
+    <fieldset name="radio1"> <legend>washers (optional):</legend>
+            {% for washer in branch.washers.all %}
+        <input type="radio" name="washer" id="washer{{ washer.pk }}" value="{{ washer.pk }}">
+        <label for="washer{{ washer.pk }}">{{washer.full_name}}</label><br/>
+            {% endfor %}
+    </fieldset>
+            <hr>
+    <fieldset name="radio2"> <legend>Boxes (optional):</legend>
+            {% for box in branch.boxes.all %}
+        <input type="radio" name="box" id="box{{ box.pk }}" value="{{ box.pk }}">
+        <label for="box{{ box.pk }}">{{box.box_code}}({{box.box_status}})</label><br/>
+            {% endfor %}
+    </fieldset>
+
+    <hr>
+        აირჩეით თავისუფალი ბოქსი:
+    <select name="boxes">
+        <option value=" ">&nbsp;</option>
+        {% for box in branch.boxes.all %}
+        <option value="{{ box.pk }}" name="box{{ washer.id }}">{{box.box_code}}({{box.box_status}})</option>
+        {% endfor %}
+
+    </select><br>
+    <hr>
+        <input type="submit" value="შეკვეთა"><br>
+        <hr>
+
+    </form>
+
+
+{% endblock body %}

@@ -29,7 +29,7 @@ class Box(models.Model):
         free = 1, _("Free")
         busy = 2, _("Busy")
 
-    Box_status = models.PositiveSmallIntegerField(choices=BoxStatus.choices, default=1)
+    box_status = models.PositiveSmallIntegerField(choices=BoxStatus.choices, default=1)
 
     def __str__(self):
         return f'{self.box_code}  from -  {self.branch_id}'

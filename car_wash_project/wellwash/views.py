@@ -20,7 +20,7 @@ class BranchView(generic.DetailView):
     template_name = 'wellwash/branch.html'
 
 
-def box(request):
+def order(request):
     boxes = Box.objects.all()
     return render(request, 'wellwash/template.html', {'many': boxes})
 
@@ -30,9 +30,9 @@ def washer(request):
     return render(request, 'wellwash/template.html', {'many': washers})
 
 
-def order(request):
-    orders = Order.objects.all()
-    return render(request, 'wellwash/template.html', {'many': orders})
+def orders(request):
+    ords = Order.objects.all()
+    return render(request, 'wellwash/template.html', {'many': ords})
 
 #
 # def home(request):

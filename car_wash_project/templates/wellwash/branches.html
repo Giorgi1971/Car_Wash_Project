@@ -1,6 +1,5 @@
 {% extends 'wellwash/base.html' %}
 
-{% load static %}
 {% block body %}
 
 {% if many %}
@@ -13,9 +12,9 @@
             <a href="{% url 'wellwash:branch' branch.id %}">{{ branch.title }}.</a></li>
             <li>
         მისამართი: {{ branch.location_id }}</li>
-        <li>მომსახურე პერსონალი:
+        <li><a>მომსახურე პერსონალი:
     {% for washer in  branch.washers.all %} {{ washer.full_name }}, {% endfor %}
-            </li>
+        </a></li>
     {% endfor %}
     </ul>
 {% else %}

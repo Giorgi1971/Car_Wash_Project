@@ -1,0 +1,11 @@
+li {
+    color: grey;
+}
+
+li a {
+    color: green;
+}
+
+body {
+    background: red url("images/tt.gif") right no-repeat;
+}

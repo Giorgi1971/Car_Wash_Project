@@ -1,12 +1,12 @@
-from django.db.models import IntegerChoices
+from django.db.models import IntegerChoices, TextChoices
 from django.utils.translation import gettext_lazy as _
 
 
-class TypeChoices(IntegerChoices):
-    Sedan = 1
-    Jip = 2
-    Mini = 3
-    Tax = 4
+class TypeChoices(TextChoices):
+    Sedan = 'Sedan'
+    Jip = 'Jip'
+    Mini = 'Mini'
+    Tax = 'Tax'
 
 
 class CarModelChoices(IntegerChoices):
@@ -26,6 +26,7 @@ class CarModelChoices(IntegerChoices):
 # class Status(IntegerChoices):
 #         customer = 1, _("Customer")
 #         washer = 2, _("Washer")
+#         manager = 3, _("Manager")
 #         manager = 3, _("Manager")
 #
 #     status = models.PositiveSmallIntegerField(choices=Status.choices)

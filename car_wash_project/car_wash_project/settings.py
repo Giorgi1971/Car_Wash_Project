@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # apps added by me:
+    'user.apps.UserConfig',
     'wellwash.apps.WellwashConfig'
 ]
 
@@ -120,3 +121,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR / 'static_common'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
+
+MEDIA_ROOT = 'media'
+MEDIA_URL = '/media/'
+
+AUTH_USER_MODEL = 'user.User'

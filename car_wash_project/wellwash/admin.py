@@ -41,11 +41,6 @@ class BoxAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Washer)
-class WashWasherAdmin(admin.ModelAdmin):
-    pass
-
-
 @admin.register(Car)
 class CarsAdmin(admin.ModelAdmin):
     pass

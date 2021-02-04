@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 
-from .models import Branch, Box, Washer, Car, Order, Location
+from .models import *
 
 
 def index(request):
@@ -25,8 +25,9 @@ def order(request):
     return render(request, 'wellwash/template.html', {'many': boxes})
 
 
+#  ეს აღარაა და გადაკეთება დაჭირდება
 def washer(request):
-    washers = Washer.objects.all()
+    washers = Order.objects.all()
     return render(request, 'wellwash/template.html', {'many': washers})
 
 

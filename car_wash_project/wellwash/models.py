@@ -1,3 +1,5 @@
+from datetime import datetime
+from django.utils import timezone
 from .choices import *
 # from django.forms import IntegerField
 from django.db.models import IntegerChoices, TextChoices
@@ -36,6 +38,29 @@ class Box(models.Model):
         return self.box_code
 
 
+class CarType(models.Model):
+    class TypeChoices(models.TextChoices):
+        SEDAN = 'SE', _('Sedan')
+        JIP = 'JI', _('Jip')
+        MINI = 'MI', _('Mini')
+        TAXI = 'TA', _('Taxi')
+
+    car_type = models.CharField(
+        max_length=2, choices=TypeChoices.choices, default=TypeChoices.SEDAN, verbose_name=_('Car Type'), unique=True)
+    price = models.DecimalField(max_digits=4, decimal_places=2)
+
+    def __str__(self):
+        return self.car_type
+
+
+class WashType(models.Model):
+    name = models.CharField(max_length=45, verbose_name=_('Car Type'), unique=True)
+    percentage = models.IntegerField(verbose_name=_("Percentage of base price"), default=100)
+
+    def __str__(self):
+        return self.name
+
+
 class Coupon(models.Model):
     code = models.CharField(max_length=30, unique=True)
     expiration_date = models.DateTimeField(verbose_name=_('Coupon Expiration Date'), null=True, blank=True)
@@ -51,30 +76,36 @@ class Coupon(models.Model):
         verbose_name_plural = _('Coupons')
 
 
-class Washer(models.Model):
-    full_name = models.CharField(max_length=255)
-    id_number = models.CharField(max_length=11, unique=True)
-    branch_id = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='washers')
-
-    def __str__(self):
-        return f'{self.full_name} - {self.id_number}  -  {self.branch_id}'
-
-
 class Car(models.Model):
     cars_model = models.PositiveSmallIntegerField(verbose_name="CarModel",
                                                   choices=CarModelChoices.choices, default=CarModelChoices.mercedes)
-    cars_type = models.CharField(max_length=10, verbose_name="CarType", choices=TypeChoices.choices, default=TypeChoices.Sedan)
-    licence_plate = models.CharField(max_length=255, default='BMW-111', unique=True)
+    car_type = models.ForeignKey(to='CarType', on_delete=models.SET_NULL,
+        null=True, related_name='cars')
+    licence_plate = models.CharField(max_length=24, default='CAR-001', unique=True)
 
     def __str__(self):
-        return f'{self.cars_model} : {self.licence_plate}: {self.cars_type}'
+        return f'{self.cars_model} : {self.licence_plate}'
 
 
 class Order(models.Model):
-    washer_id = models.ForeignKey(Washer, on_delete=models.PROTECT, related_name='orders')
+    car_id = models.ForeignKey(to='Car', on_delete=models.PROTECT, related_name='orders')
+
+    employee_id = models.ForeignKey(
+        to='user.User', on_delete=models.SET_NULL, null=True, related_name='orders')
+    coupon = models.ForeignKey(
+        to='Coupon', related_name='orders',
+        on_delete=models.PROTECT,
+        null=True, blank=True,
+    )
+    wash_type = models.ForeignKey(
+        to='WashType', related_name='orders',
+        on_delete=models.PROTECT,
+    )
     box_id = models.ForeignKey(Box, on_delete=models.PROTECT, related_name='orders')
-    car_id = models.ForeignKey(Car, on_delete=models.PROTECT, related_name='orders')
-    order_time = models.DateTimeField(verbose_name="Order time", blank=False,)
+    price = models.DecimalField(max_digits=4, decimal_places=2, verbose_name=_("Price"))
+    my_wash_price = models.DecimalField(max_digits=4, decimal_places=2, verbose_name=_("Price"))
+
+    order_time = models.DateTimeField(verbose_name="Order time", auto_now_add=True)
     start_time = models.DateTimeField(verbose_name="Begin time", null=True)
     end_time = models.DateTimeField(verbose_name="End time", null=True)
 
@@ -86,7 +117,16 @@ class Order(models.Model):
     status = models.PositiveSmallIntegerField(choices=Status.choices)
 
     def __str__(self):
-        return f'{self.car_id.licence_plate} - {self.status}'
+        return f'{self.car_id} using {self.wash_type}. status: {self.status}'
+
+    class Meta:
+        verbose_name = _('Order')
+        verbose_name_plural = _('Orders')
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.price = self.car_id.car_type.price * self.wash_type.percentage / 100
+        super(Order, self).save(*args, **kwargs)
 
     def get_quantity_closed(self):
         pass

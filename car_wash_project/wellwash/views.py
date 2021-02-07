@@ -13,17 +13,21 @@ from wellwash.models import *
 
 # @TODO: Add Manager Method For Washer Listing
 
+def index(request):
+    return render(request=request, template_name='wellwash/index.html')
+
+
 def washers_list(request: WSGIRequest) -> HttpResponse:
     washer_q = Q()
     order_q = Q()
-    q = request.GET.get('q')
+    q = request.GET.get('washer')
 
     if q:
         washer_q &= Q(first_name__icontains=q[-1]) | Q(last_name__icontains=q[-1])
         order_q &= Q(employee__first_name__icontains=q[-1]) | Q(employee__last_name__icontains=q[-1])
 
     profit_q = ExpressionWrapper(
-        F('price') * (1 - F('employee__salary') / Decimal('100.0')),
+        F('my_wash_price') * (1 - F('employee__salary') / Decimal('100.0')),
         output_field=DecimalField()
     )
     order_info: Dict[str, Optional[Decimal]] = Order.objects.filter(end_time__isnull=False).filter(order_q) \

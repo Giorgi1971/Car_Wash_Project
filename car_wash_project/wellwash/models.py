@@ -48,7 +48,7 @@ class CarType(models.Model):
 
     car_type = models.CharField(
         max_length=2, choices=TypeChoices.choices, default=TypeChoices.SEDAN, verbose_name=_('Car Type'), unique=True)
-    price = models.DecimalField(max_digits=4, decimal_places=2)
+    price = models.DecimalField(max_digits=4, decimal_places=2, verbose_name='PRice')
 
     def __str__(self):
         return self.car_type
@@ -59,7 +59,7 @@ class Car(models.Model):
                                                   choices=CarModelChoices.choices, default=CarModelChoices.mercedes)
 
     car_type = models.ForeignKey(to='CarType', on_delete=models.SET_NULL,
-        null=True, related_name='cars')
+        null=True, related_name='car_car')
     licence_plate = models.CharField(max_length=24, default='CAR-000', unique=True)
 
     def __str__(self):
@@ -104,7 +104,6 @@ class Order(models.Model):
         on_delete=models.PROTECT,
     )
     box = models.ForeignKey(Box, on_delete=models.PROTECT, related_name='orders')
-    price = models.DecimalField(max_digits=4, decimal_places=2, verbose_name=_("Price"))
     my_wash_price = models.DecimalField(max_digits=4, decimal_places=2, verbose_name=_("Price"))
 
     order_time = models.DateTimeField(verbose_name="Order time", auto_now_add=True)
@@ -119,7 +118,7 @@ class Order(models.Model):
     status = models.CharField(max_length=24, choices=StatusType.choices, default=StatusType.ordered)
 
     def __str__(self):
-        return f'{self.car} using {self.wash_type}. status: {self.status}'
+        return f'{self.car} using {self.wash_type}. status: {self.status}. - status: {self.my_wash_price}'
 
     class Meta:
         verbose_name = _('Order')
@@ -127,7 +126,7 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.price = self.car.car_type.price * self.wash_type.percentage / 100
+            self.my_wash_price = self.car.car_type.price * self.wash_type.percentage / 100
         super(Order, self).save(*args, **kwargs)
 
     def get_quantity_closed(self):

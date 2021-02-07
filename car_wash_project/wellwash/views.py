@@ -1,94 +1,85 @@
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
-from django.views import generic
+from decimal import Decimal
+from typing import Dict, Optional
 
-from .models import *
+from django.core.handlers.wsgi import WSGIRequest
+from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count, Q
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
 
-
-def index(request):
-    return render(request, 'wellwash/index.html')
-
-
-def branches(request):
-    bs = Branch.objects.all()
-    return render(request, 'wellwash/branches.html', {'many': bs})
+from user.models import *
+from wellwash.models import *
 
 
-class BranchView(generic.DetailView):
-    model = Branch
-    template_name = 'wellwash/branch.html'
+# @TODO: Add Manager Method For Washer Listing
+
+def washers_list(request: WSGIRequest) -> HttpResponse:
+    washer_q = Q()
+    order_q = Q()
+    q = request.GET.get('q')
+
+    if q:
+        washer_q &= Q(first_name__icontains=q[-1]) | Q(last_name__icontains=q[-1])
+        order_q &= Q(employee__first_name__icontains=q[-1]) | Q(employee__last_name__icontains=q[-1])
+
+    profit_q = ExpressionWrapper(
+        F('price') * (1 - F('employee__salary') / Decimal('100.0')),
+        output_field=DecimalField()
+    )
+    order_info: Dict[str, Optional[Decimal]] = Order.objects.filter(end_time__isnull=False).filter(order_q) \
+        .annotate(profit_per_order=profit_q) \
+        .aggregate(profit=Sum('profit_per_order'), total=Count('id'))
+
+    context = {
+        'washers': User.objects.filter(status=User.Status.washer.value).filter(washer_q).annotate(
+            washed_count=Count('orders')),
+        # **order_info
+    }
+    context.update(order_info)
+
+    return render(request=request, template_name='wellwash/washers.html', context=context)
 
 
-def order(request):
-    boxes = Box.objects.all()
-    return render(request, 'wellwash/template.html', {'many': boxes})
+def washer_detail(request: WSGIRequest, pk: int) -> HttpResponse:
+    washer: User = get_object_or_404(
+        User.objects.filter(status=User.Status.washer.value),
+        pk=pk
+    )
+    earned_money_q = ExpressionWrapper(
+        F('price') * F('employee__salary') / Decimal('100.0'),
+        output_field=DecimalField()
+    )
+    now = timezone.now()
+    washer_salary_info: Dict[str, Optional[Decimal]] = washer.orders.filter(end_time__isnull=False) \
+        .annotate(earned_per_order=earned_money_q) \
+        .aggregate(
+        earned_money_year=Sum(
+            'earned_per_order',
+            filter=Q(end_time__gte=now - timezone.timedelta(days=365))
+        ),
+        washed_last_year=Count(
+            'id',
+            filter=Q(end_time__gte=now - timezone.timedelta(days=365))
+        ),
+        earned_money_month=Sum(
+            'earned_per_order',
+            filter=Q(end_time__gte=now - timezone.timedelta(weeks=4))
+        ),
+        washed_last_month=Count(
+            'id',
+            filter=Q(end_time__gte=now - timezone.timedelta(weeks=4))
+        ),
+        earned_money_week=Sum(
+            'earned_per_order',
+            filter=Q(end_time__gte=now - timezone.timedelta(days=7))
+        ),
+        washed_last_week=Count(
+            'id',
+            filter=Q(end_time__gte=now - timezone.timedelta(days=7))
+        )
+    )
 
-
-#  ეს აღარაა და გადაკეთება დაჭირდება
-def washer(request):
-    washers = Order.objects.all()
-    return render(request, 'wellwash/template.html', {'many': washers})
-
-
-def orders(request):
-    ords = Order.objects.all()
-    return render(request, 'wellwash/template.html', {'many': ords})
-
-#
-# def home(request):
-#     latest_cars_list = Car.objects.all()[:10]
-#     data = [{"car": cc.cars_number} for cc in latest_cars_list]
-#     return JsonResponse(data, safe=False)
-#
-#
-# def car(request):
-#     latest_cars_list = Car.objects.all()[:10]
-#     data = [{"car": cc.cars_number} for cc in latest_cars_list]
-#     return JsonResponse(data, safe=False)
-#
-
-# def box(request):
-#     free_boxes = get_object_or_404(Box)
-#     cont = {'cont': free_boxes}
-#     return render(request, 'wellwash/box.html', cont)
-
-
-# class IndexView(generic.ListView):
-#     template_name = 'wellwash/index.html'
-#     context_object_name = 'Wash_branch'
-#
-#     def get_queryset(self):
-#         """Return the last five published questions."""
-#         return Branch.objects.all()
-
-
-# def locations(request):
-#     all_location = Branch.objects.all()
-#     cont = {'cont': all_location}
-#     return render(request, 'wellwash/locations.html', cont)
-
-
-# def location(request, location_id):
-#     free_boxes = get_object_or_404(Branch, pk=location_id).giorgi.filter(box_status='free')
-#     cont = {'cont': free_boxes}
-#     return render(request, 'wellwash/boxes.html', cont)
-
-#
-#
-# def washer(request):
-#     washer_list = Washer.objects.all()
-#     cont = {'cont': washer_list}
-#     return render(request, 'wellwash/index.html', cont)
-#
-#
-# class CarsView(generic.DetailView):
-#     model = Car
-#     template_name = 'wellwash/models_view.html'
-#
-#
-#
-#
-# def order(request):
-#     model = Order
-#     template_name = 'wellwash/models_view.html'
+    return render(request, template_name='wash/washer-detail.html', context={
+        'washer': washer,
+        **washer_salary_info
+    })

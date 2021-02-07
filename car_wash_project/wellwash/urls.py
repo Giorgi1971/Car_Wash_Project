@@ -3,22 +3,7 @@ from .views import *
 
 app_name = 'wellwash'
 urlpatterns = [
-    path('', index, name='index'),
-    path('branches/', branches, name='branches'),
-    path('branches/<int:pk>', BranchView.as_view(), name='branch'),
-    # path('boxes/', box, name='box'),
-    path('washers/', washer, name='washer'),
-    path('order/', order, name='order'),
-    path('orders/', orders, name='orders'),
-
-    # path('home/', home, name='home'),
-    # path('car/', car, name='car'),
-
-    # path('locations/<int:location_id>/boxes/', location, name='location'),
-    # path('locations/boxes/<int:box_id>', box, name='box'),
-    # path('locations/car/', car_type, name='car_type'),
-    # path('cars/', CarsView.as_view(), name='cars'),
-    # path('<int:question_id>/', views.vote, name='vote'),
+    path('washers/', washers_list, name='washers'),
+    path('washers/<int:pk>/', washer_detail, name='washer'),
 ]
 
-# path('', IndexView.as_view(), name='index1'),

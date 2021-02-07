@@ -3,28 +3,6 @@ from django.contrib import admin
 from .models import *
 
 
-# class StoreToBookInline(admin.TabularInline):
-#     model = StoreToBook
-#     extra = 1
-
-
-# @admin.register(Branch)
-# class WashObjectAdmin(admin.ModelAdmin):
-#     inlines = [WashObjectInline]
-
-
-# @admin.register(Book)
-# class BookModelAdmin(admin.ModelAdmin):
-#     readonly_fields = ['created', 'updated']
-#     list_display = ['__str__', ]
-#     search_fields = ['name', 'author__full_name']
-#     list_filter = ['author']
-#     inlines = [StoreToBookInline]
-#     filter_horizontal = ('author',)
-
-# ეს უფრო მარტივი რატომ არაა:
-# admin.site.register(Question)
-
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     # fields = ['end_time', 'status']
@@ -54,6 +32,35 @@ class LocationAdmin(admin.ModelAdmin):
     pass
 
 
+admin.site.register(CarType)
+
+
+admin.site.register(WashType)
+
+
 # @admin.register(Student)
 # class StudentObjectModelAdmin(admin.ModelAdmin):
 #     pass
+
+
+# class StoreToBookInline(admin.TabularInline):
+#     model = StoreToBook
+#     extra = 1
+
+
+# @admin.register(Branch)
+# class WashObjectAdmin(admin.ModelAdmin):
+#     inlines = [WashObjectInline]
+
+
+# @admin.register(Book)
+# class BookModelAdmin(admin.ModelAdmin):
+#     readonly_fields = ['created', 'updated']
+#     list_display = ['__str__', ]
+#     search_fields = ['name', 'author__full_name']
+#     list_filter = ['author']
+#     inlines = [StoreToBookInline]
+#     filter_horizontal = ('author',)
+
+# ეს უფრო მარტივი რატომ არაა:
+# admin.site.register(Question)

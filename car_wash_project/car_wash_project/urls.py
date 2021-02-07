@@ -21,8 +21,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
-    # my_urls:
-    path('', include('wellwash.urls')),
+    # my_urls in wellwash app
+    path('', include('wellwash.urls', namespace='wellwash')),
 ]
 
 if settings.DEBUG:

@@ -16,7 +16,11 @@ from .models import *
 
 # @TODO: Add Manager Method For Washer Listing
 
-def index(request):
+def index(request: WSGIRequest) -> HttpResponse:
+    if request.method == 'POST':
+        print('Giorgi')
+        data = {'email': request.POST.get('email'), 'text': request.POST.get('body')}
+        return render(request=request, template_name='wellwash/index.html', context=data)
     return render(request=request, template_name='wellwash/index.html')
 
 
@@ -98,7 +102,7 @@ def contact(request: WSGIRequest):
         contact_form.is_valid()
         contact_form = ContactForm(request.POST)
         # send_mail()
-    return render(request, template_name='wash/contact.html', context={
+    return render(request, template_name='wellwash/contact.html', context={
         'contact_form': contact_form
     })
 
@@ -110,11 +114,11 @@ def make_order(request: WSGIRequest, pk: int):
         if order_form.is_valid():
             order: Order = order_form.save(commit=False)
             order.employee_id = pk
-            order.start_date = timezone.now()
+            order.start_time = timezone.now()
             order.save()
 
-        return redirect('wash:washer-detail')
+        return redirect('wellwash:washer_detail')
 
-    return render(request, template_name='wash/contact.html', context={
+    return render(request, template_name='wellwash/contact.html', context={
         'contact_form': order_form
     })

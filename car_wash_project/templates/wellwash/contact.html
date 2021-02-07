@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="padding:0 20px">
+<form action="{% url 'wellwash:index' %}" method="post">
+    {% csrf_token %}
+    {{ contact_form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+    </div>
+
+
+
+
+{% endblock %}

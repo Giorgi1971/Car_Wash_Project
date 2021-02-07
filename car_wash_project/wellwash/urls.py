@@ -9,4 +9,3 @@ urlpatterns = [
     path('contact/', contact, name='contact'),
     path('order/<int:pk>/', make_order, name='order'),
 ]
-

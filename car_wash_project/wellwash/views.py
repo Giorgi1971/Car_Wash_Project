@@ -4,11 +4,14 @@ from typing import Dict, Optional
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count, Q
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
+# @TODO: Add Manager Method For Washer Listing
+
+from .forms import ContactForm, OrderForm
 from user.models import *
-from wellwash.models import *
+from .models import *
 
 
 # @TODO: Add Manager Method For Washer Listing
@@ -50,7 +53,7 @@ def washer_detail(request: WSGIRequest, pk: int) -> HttpResponse:
         pk=pk
     )
     earned_money_q = ExpressionWrapper(
-        F('price') * F('employee__salary') / Decimal('100.0'),
+        F('my_wash_price') * F('employee__salary') / Decimal('100.0'),
         output_field=DecimalField()
     )
     now = timezone.now()
@@ -83,7 +86,35 @@ def washer_detail(request: WSGIRequest, pk: int) -> HttpResponse:
         )
     )
 
-    return render(request, template_name='wash/washer-detail.html', context={
+    return render(request, template_name='wellwash/washer_detail.html', context={
         'washer': washer,
         **washer_salary_info
+    })
+
+
+def contact(request: WSGIRequest):
+    contact_form = ContactForm()
+    if request.method == 'POST':
+        contact_form.is_valid()
+        contact_form = ContactForm(request.POST)
+        # send_mail()
+    return render(request, template_name='wash/contact.html', context={
+        'contact_form': contact_form
+    })
+
+
+def make_order(request: WSGIRequest, pk: int):
+    order_form = OrderForm()
+    if request.method == 'POST':
+        order_form = OrderForm(request.POST)
+        if order_form.is_valid():
+            order: Order = order_form.save(commit=False)
+            order.employee_id = pk
+            order.start_date = timezone.now()
+            order.save()
+
+        return redirect('wash:washer-detail')
+
+    return render(request, template_name='wash/contact.html', context={
+        'contact_form': order_form
     })

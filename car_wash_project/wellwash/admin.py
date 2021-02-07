@@ -1,11 +1,10 @@
-# Register your models here.
-from django.contrib import admin
 from .models import *
+
+from django.contrib import admin
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    # fields = ['end_time', 'status']
     pass
 
 
@@ -27,16 +26,7 @@ class CarsAdmin(admin.ModelAdmin):
     #         ('Date information', {'fields': ['cars_number']})]
 
 
-@admin.register(Location)
-class LocationAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(CarType)
-
-
-admin.site.register(WashType)
-
+admin.site.register([WashType, Location, Coupon, CarType])
 
 # @admin.register(Student)
 # class StudentObjectModelAdmin(admin.ModelAdmin):

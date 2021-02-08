@@ -9,7 +9,7 @@ from django.utils import timezone
 
 # @TODO: Add Manager Method For Washer Listing
 
-from .forms import ContactForm, OrderForm
+from .forms import ContactForm, OrderForm, OrderForm1
 from user.models import *
 from .models import *
 
@@ -107,18 +107,30 @@ def contact(request: WSGIRequest):
     })
 
 
+def order5(request: WSGIRequest):
+    order_form = OrderForm1()
+    if request.method == 'POST':
+        order_form.is_valid()
+        order_form = OrderForm1(request.POST)
+        # send_mail()
+    return render(request, template_name='wellwash/order.html', context={
+        'order_form': order_form
+    })
+
+
 def make_order(request: WSGIRequest, pk: int):
     order_form = OrderForm()
+    pk = request.POST.get('pk')
     if request.method == 'POST':
         order_form = OrderForm(request.POST)
         if order_form.is_valid():
-            order: Order = order_form.save(commit=False)
-            order.employee_id = pk
-            order.start_time = timezone.now()
-            order.save()
+            order1: Order = order_form.save(commit=False)
+            order1.employee_id = pk
+            order1.start_time = timezone.now()
+            order1.save()
 
-        return redirect('wellwash:washer_detail')
+        return redirect('wellwash:index')
 
-    return render(request, template_name='wellwash/contact.html', context={
+    return render(request, template_name='wellwash/save_form.html', context={
         'contact_form': order_form
     })

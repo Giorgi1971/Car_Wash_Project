@@ -20,7 +20,7 @@ class ContactForm(forms.Form):
     body = CharField()
 
 
-class CarForm(forms.ModelForm):
+class CarModelForm(forms.ModelForm):
     class Meta:
         model = Car
         fields = '__all__'

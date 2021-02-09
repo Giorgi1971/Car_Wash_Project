@@ -13,7 +13,7 @@ from django.utils import timezone
 # @TODO: Add Manager Method For Washer Listing
 from django.views import generic
 
-from .forms import ContactForm, OrderForm, OrderForm1, CarForm
+from .forms import ContactForm, OrderForm, OrderForm1, CarModelForm
 from .models import *
 
 
@@ -36,28 +36,26 @@ def coupon(request: WSGIRequest) -> HttpResponse:
 class CarView(generic.ListView):
     template_name = 'wellwash/cars.html'
     context_object_name = 'Cars_list'
-    car_form = CarForm()
+    car_form = CarModelForm()
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return CarForm
+        return CarModelForm
 
 
 def add_car(request: WSGIRequest, add: str):
-    car_add_form = CarForm()
-    add = request.POST.get('add')
+    car_add_form = CarModelForm()
+    print(request.POST)
     if request.method == 'POST':
-        car_add_form = CarForm(request.POST)
+        car_add_form = CarModelForm(request.POST)
         if car_add_form.is_valid():
-            order1: Car = car_add_form.save(commit=False)
-            order1.employee_id = pk
-            order1.start_time = timezone.now()
-            order1.save()
+            car1: Car = car_add_form.save(commit=False)
+            car1.save()
 
-        return redirect('wellwash:index')
+        return redirect('wellwash:car')
 
-    return render(request, template_name='wellwash/save_form.html', context={
-        'contact_form': car_add_form
+    return render(request, template_name='wellwash/add.html', context={
+        'order_form': car_add_form
     })
 
 
@@ -157,7 +155,7 @@ def car(request: WSGIRequest):
     page_obj = paginator.get_page(page_number)
     if request.POST:
 
-        return render(request, 'list.html', {'page_obj': page_obj})
+        return render(request, 'wellwash/cars.html', {'page_obj': page_obj})
 
     context = {
         'cars': Car.objects.filter(plate_q),

@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     # my_urls in wellwash app
     path('', include('wellwash.urls', namespace='wellwash')),
+    path('', include('user.urls', namespace='user')),
 ]
 
 if settings.DEBUG:

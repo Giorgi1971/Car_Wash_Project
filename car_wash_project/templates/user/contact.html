@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div style="padding:0 20px">
+<form action="." method="post">
+    {% csrf_token %}
+    {{ contact_form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+<!--აქ არის ის რაც ზევით ჩანს. ანუ აიდი-ს რა ერქმევა და დანარჩენბს აქ შემიძლია ვნახო.-->
+<!--<p><label for="id_subject">Subject:</label>-->
+<!--    <input id="id_subject" type="text" name="subject" maxlength="100" required></p>-->
+<!--<p><label for="id_message">Message:</label>-->
+<!--    <textarea name="message" id="id_message" required></textarea></p>-->
+<!--<p><label for="id_sender">Sender:</label>-->
+<!--    <input type="email" name="sender" id="id_sender" required></p>-->
+<!--<p><label for="id_cc_myself">Cc myself:</label>-->
+<!--    <input type="checkbox" name="cc_myself" id="id_cc_myself"></p>-->
+<hr>
+<hr>
+<hr>
+    {% for field in contact_form %}
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+        {% if field.help_text %}
+        <p class="help">{{ field.help_text|safe }}</p>
+        {% endif %}
+    </div>
+{% endfor %}
+<hr>
+<hr>
+{% if contact_form.subject.errors %}
+    <ol>
+    {% for error in contact_form.subject.errors %}
+        <li><strong>{{ error|escape }}</strong></li>
+    {% endfor %}
+    </ol>
+{% endif %}</ul>
+<hr>
+<hr>
+<hr>
+<form action="." method="post">
+    {% csrf_token %}
+
+{{ form.non_field_errors }}
+<div class="fieldWrapper">
+    {{ contact_form.subject.errors }}
+    {{ contact_form.subject.label_tag }}
+    {{ contact_form.subject }}
+</div>
+<div class="fieldWrapper">
+    {{ contact_form.message.errors }}
+    {{ contact_form.message.label_tag }}
+    {{ contact_form.message }}
+</div>
+<div class="fieldWrapper">
+    {{ contact_form.sender.errors }}
+    {{ contact_form.sender.label_tag }}
+    {{ contact_form.sender }}
+</div>
+    <hr>
+<div class="fieldWrapper">
+    {{ contact_form.cc_myself.errors }}
+    {{ contact_form.cc_myself.label_tag }}
+    {{ contact_form.cc_myself }}
+</div>
+        <input type="submit" value="Submit">
+
+</form>
+
+</div>
+
+{% endblock %}

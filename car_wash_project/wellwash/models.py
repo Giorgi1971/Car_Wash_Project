@@ -65,6 +65,9 @@ class Car(models.Model):
     def __str__(self):
         return f'{self.cars_model} : {self.licence_plate}'
 
+    def ct(self):
+        pass
+
 
 class WashType(models.Model):
     name = models.CharField(max_length=12, verbose_name=_('Wash Type'), unique=True)

@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from .forms import NameForm, ContactForm
+from .forms import ContactForm
 from django.core.mail import send_mail
 
 
@@ -19,11 +19,14 @@ def contact_us(request):
             sender = form.cleaned_data['sender']
             cc_myself = form.cleaned_data['cc_myself']
 
-            recipients = ['giooorgi7@gmail.com']
+            recipients = ['info@example.com',]
             if cc_myself:
                 recipients.append(sender)
+                print(recipients)
 
-            # send_mail(subject, message, sender, recipients)
+            print(subject, message, sender, recipients)
+            return HttpResponseRedirect('/thanks/')
+
         return render(request, template_name='user/contact.html', context={
             'contact_form': form
         })
@@ -32,24 +35,4 @@ def contact_us(request):
         return render(request, template_name='user/contact.html', context={
             'contact_form': form
         })
-
-
-def get_name(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = NameForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = NameForm()
-
-    return render(request, 'ind.html', {'form': form})
-
 

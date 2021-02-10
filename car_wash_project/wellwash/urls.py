@@ -7,6 +7,7 @@ app_name = 'wellwash'
 urlpatterns = [
     path('', index, name='index'),
     path('washers/', washers_list, name='washers'),
+    path('washerss/', washers_lists, name='washerss'),
     path('washers/<int:pk>/', washer_detail, name='washer_detail'),
     path('contact/', contact, name='contact'),
     path('coupons/', coupon, name='coupon'),

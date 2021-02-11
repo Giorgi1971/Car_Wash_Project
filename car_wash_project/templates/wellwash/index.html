@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h4 style="padding: 0 30px;"> Hello in WellWash! </h4>
+<h4 style="padding: 0 30px;"> Welcome  in  <strong>WellWash!</strong></h4>
 <hr>
 <div style="padding: 0 30px;">
 
@@ -10,13 +10,13 @@
       <div class="card">
         <div class="card-image">
           <img src="../static/wellwash/images/ccc.jpg" style="height: 250px;">
-          <span class="card-title" style="color: Black; font-weight: bold; text-shadow: 0px 0px 5px #ffffff;">Cars Page</span>
+          <span class="card-title" style="color: Black; font-weight: bold; text-shadow: 0px 0px 5px #ffffff;">Cars!</span>
         </div>
         <div class="card-content">
-          <p>Welcome. Thanks for Corporation with Us!</p>
+          <p>Thanks for Corporation with Us!</p>
         </div>
         <div class="card-action">
-          <a href="{% url 'wellwash:car' %}">See or Add Cars!</a>
+          <a href="{% url 'wellwash:car' %}" style="color: rgb(200,50,50); font-weight: bold;">See or Add Cars!</a>
         </div>
       </div>
     </div>
@@ -27,10 +27,10 @@
           <span class="card-title" style="color: Black; font-weight: bold; text-shadow: 0px 0px 5px #ffffff;">Heroes!</span>
         </div>
         <div class="card-content">
-          <p>Welcome. Our heroes are waiting for you!</p>
+          <p>Our heroes are waiting for you!</p>
         </div>
         <div class="card-action">
-          <a href="{% url 'wellwash:washers' %}">Our heroes!</a>
+          <a href="{% url 'wellwash:washers' %}" style="color: rgb(200,50,50); font-weight: bold;">Our heroes!</a>
         </div>
       </div>
     </div>
@@ -38,13 +38,13 @@
       <div class="card">
         <div class="card-image">
           <img src="../static/wellwash/images/washer.png" style="height: 250px;">
-          <span class="card-title" style="color: Black; font-weight: bold; text-shadow: 0px 0px 5px #ffffff;">Coupons</span>
+          <span class="card-title" style="color: Black; font-weight: bold; text-shadow: 0px 0px 5px #ffffff;">Coupons!</span>
         </div>
         <div class="card-content">
-          <p>Take Coupons and Make the car happy!</p>
+          <p>Take and Make the car happy!</p>
         </div>
         <div class="card-action">
-          <a href="{% url 'wellwash:coupon' %}">Buy Coupons!</a>
+          <a href="{% url 'wellwash:coupon' %}" style="color: rgb(200,50,50); font-weight: bold;">Buy Coupons!</a>
         </div>
       </div>
     </div>
@@ -55,10 +55,10 @@
           <span class="card-title" style="color: Black; font-weight: bold; text-shadow: 0px 0px 5px #ffffff;">Order!</span>
         </div>
         <div class="card-content">
-          <p>Make Your Order and get hot coffee!</p>
+          <p>Do Order and get hot coffee!</p>
         </div>
         <div class="card-action">
-          <a href="{% url 'wellwash:car' %}">Make Your Order!</a>
+          <a href="{% url 'wellwash:order' %}" style="color: rgb(200,50,50); font-weight: bold;">Make Your Order!</a>
         </div>
       </div>
     </div>

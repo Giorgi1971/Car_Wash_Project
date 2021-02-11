@@ -78,15 +78,20 @@ class WashType(models.Model):
 
 
 class Coupon(models.Model):
-    code = models.CharField(max_length=5, unique=True)
-    purchase_date = models.DateTimeField(verbose_name="purchase date", auto_now_add=True)
+    code = models.PositiveSmallIntegerField(unique=True)
+    activate_date = models.DateTimeField(verbose_name="Activate date")
     discount = models.IntegerField(verbose_name=_('Discount'), help_text='%', default=20)
     validate = models.IntegerField(verbose_name=_('Validate period'), help_text='day', default=30)
-    quantity = models.IntegerField(verbose_name=_('Quantity'), default=4)
-    car_plate_id = models.OneToOneField(Car, on_delete=models.PROTECT, related_name='coupon')
+    quantity = models.IntegerField(verbose_name=_('Quantity'), default=5)
+    car_plate = models.OneToOneField(Car, on_delete=models.PROTECT, related_name='coupon')
 
     def __str__(self):
-        return self.code
+        return str(self.code)
+
+    def valid_coupon(self):
+        if abs(self.activate_date - timezone.now()).days < self.validate:  # აქ გვინდა anotation quantity -ზე
+            return True
+        return False
 
     class Meta:
         verbose_name = _('Coupon')
@@ -115,9 +120,9 @@ class Order(models.Model):
     end_time = models.DateTimeField(verbose_name="End time", null=True)
 
     class StatusType(TextChoices):
-        ordered = 'ordered', _("Ordered")
-        process = 'process', _("Process")
-        closed = 'closed', _("Closed")
+        ordered = 'oordered', _("Ordered")
+        process = 'pprocess', _("Process")
+        closed = 'cclosed', _("Closed")
 
     status = models.CharField(max_length=24, choices=StatusType.choices, default=StatusType.ordered)
 

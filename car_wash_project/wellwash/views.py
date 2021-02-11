@@ -13,7 +13,7 @@ from django.utils import timezone
 # @TODO: Add Manager Method For Washer Listing
 from django.views import generic
 
-from .forms import ContactForm, OrderForm, OrderForm1, CarModelForm
+from .forms import *
 from .models import *
 
 
@@ -25,12 +25,52 @@ def index(request: WSGIRequest) -> HttpResponse:
     return render(request=request, template_name='wellwash/index.html')
 
 
-def coupon(request: WSGIRequest) -> HttpResponse:
+def add_coupon(request: WSGIRequest, add: str):
+    coupon_add_form = CouponModelForm()
     if request.method == 'POST':
-        print('Coupon')
-        data = {'email': request.POST.get('email'), 'text': request.POST.get('body')}
-        return render(request=request, template_name='wellwash/index.html', context=data)
-    return render(request=request, template_name='wellwash/index.html')
+        coupon_add_form = CouponModelForm(request.POST)
+        print(request.POST)
+        if coupon_add_form.is_valid():
+            print(coupon_add_form.cleaned_data)
+            ord1: Coupon = coupon_add_form.save(commit=False)
+            ord1.save()
+
+        return redirect('wellwash:coupon')
+
+    return render(request, template_name='wellwash/add_coup.html', context={
+        'form': coupon_add_form
+    })
+
+
+def coupon(request: WSGIRequest) -> HttpResponse:
+    coupon_q = Q()
+    c1 = request.GET.get('coupon')
+    print('----')
+    if c1:
+        coupon_q &= Q(code__icontains=c1)
+        print(coupon_q)
+    coupons_list = Coupon.objects.filter(coupon_q)
+    paginator = Paginator(coupons_list, 25)  # Show 25 contacts per page.
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    coupon_form = CouponModelForm()
+
+    if request.method == 'POST':
+        print('GIO')
+        coupon_form = CouponModelForm(request.POST)
+        if coupon_form.is_valid():
+            coupon1: Coupon = coupon_form.save(commit=False)
+            coupon1.save()
+
+        return redirect('wash:washer-detail')
+
+    context = {
+        'coupon_form': coupon_form,
+        'cars': coupons_list,
+        'page_obj': page_obj,
+    }
+    return render(request=request, template_name='wellwash/coupons.html', context=context)
 
 
 class CarView(generic.ListView):
@@ -49,6 +89,7 @@ def add_car(request: WSGIRequest, add: str):
     if request.method == 'POST':
         car_add_form = CarModelForm(request.POST)
         if car_add_form.is_valid():
+            print('car form is valid')
             car1: Car = car_add_form.save(commit=False)
             car1.save()
 
@@ -84,33 +125,6 @@ def washers_list(request: WSGIRequest) -> HttpResponse:
     context.update(order_info)
 
     return render(request=request, template_name='wellwash/washers.html', context=context)
-
-
-def washers_lists(request: WSGIRequest) -> HttpResponse:
-    washer_q = Q()
-    order_q = Q()
-    q = request.GET.get('washer')
-
-    if q:
-        washer_q &= Q(first_name__icontains=q[-1]) | Q(last_name__icontains=q[-1])
-        order_q &= Q(employee__first_name__icontains=q[-1]) | Q(employee__last_name__icontains=q[-1])
-
-    profit_q = ExpressionWrapper(
-        F('my_wash_price') * (1 - F('employee__salary') / Decimal('100.0')),
-        output_field=DecimalField()
-    )
-    order_info: Dict[str, Optional[Decimal]] = Order.objects.filter(end_time__isnull=False).filter(order_q) \
-        .annotate(profit_per_order=profit_q) \
-        .aggregate(profit=Sum('profit_per_order'), total=Count('id'))
-
-    context = {
-        'washers': User.objects.filter(status=User.Status.washer.value).filter(washer_q).annotate(
-            washed_count=Count('orders')),
-        # **order_info
-    }
-    context.update(order_info)
-
-    return render(request=request, template_name='wellwash/washerss.html', context=context)
 
 
 def washer_detail(request: WSGIRequest, pk: int) -> HttpResponse:
@@ -191,22 +205,59 @@ def car(request: WSGIRequest):
     return render(request=request, template_name='wellwash/cars.html', context=context)
 
 
-def order5(request: WSGIRequest):
-    order_form = OrderForm1()
+def add_order(request: WSGIRequest, add: str):
+    order_form = OrderModelForm()
+    print('--mm-')
     if request.method == 'POST':
-        order_form.is_valid()
-        order_form = OrderForm1(request.POST)
-        # send_mail()
-    return render(request, template_name='wellwash/order.html', context={
+        print('--POST MEtod--')
+        order_form = OrderModelForm(request.POST)
+        print(request.POST)
+        if order_form.is_valid():
+            print('--valided--')
+            order1 = order_form.save(commit=False)
+            order1.save()
+
+    return render(request, template_name='wellwash/add-order-form.html', context={
         'order_form': order_form
     })
 
 
+def order(request: WSGIRequest):
+    order_q = Q()
+    c1 = request.GET.get('order')
+    if c1:
+        order_q &= Q(car=c1)
+        print(order_q)
+    order_list = Order.objects.filter(order_q)
+    paginator = Paginator(order_list, 12)  # Show 12 contacts per page.
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    order_form = OrderModelForm()
+
+    # if request.method == 'POST':
+    #     print('POST')
+    #     coupon_form = CouponModelForm(request.POST)
+    #     if coupon_form.is_valid():
+    #         coupon1: Coupon = coupon_form.save(commit=False)
+    #         coupon1.save()
+    #
+    #     return redirect('wash:washer-detail')
+
+    context = {
+        'form': order_form,
+        'orders': order_list,
+        'page_obj': page_obj,
+    }
+
+    return render(request=request, template_name='wellwash/orders.html', context=context)
+
+
 def make_order(request: WSGIRequest, pk: int):
-    order_form = OrderForm()
+    order_form = OrderModelForm()
     pk = request.POST.get('pk')
     if request.method == 'POST':
-        order_form = OrderForm(request.POST)
+        order_form = OrderModelForm(request.POST)
         if order_form.is_valid():
             order1: Order = order_form.save(commit=False)
             order1.employee_id = pk

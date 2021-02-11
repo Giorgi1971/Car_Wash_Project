@@ -19,7 +19,7 @@
                 <div class="input-field inline">
                     <input id="search_car" type="text" name="plate" value="{{ request.GET.plate }}">
                             <label for="search_car">Enter plate</label>
-                            <span class="helper-text" data-error="wrong" data-success="right">Format: AAA-000 or part Plate</span>
+                            <span class="helper-text" data-error="wrong" data-success="right">Format: ABC-123 or part Plate</span>
                 </div>
                 <button >SEARCH</button>
             </div>
@@ -27,8 +27,9 @@
     </form>
   </div>
 
-    <a href="{% url 'wellwash:add_car' 'add_car' %}" style="font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:30;"> Add Car</a>
+    <button> <a href="{% url 'wellwash:add_car' 'add_car' %}" style="color: Red; font-family: Arial, Helvetica, sans-serif; padding: 50px; font-weight: bold; font-size:30;"> Add New Car</a></button>
 <!-- მანქანების ცხრილი-->
+<hr>
 
     <table>
 

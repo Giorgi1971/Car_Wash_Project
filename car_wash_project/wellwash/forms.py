@@ -11,8 +11,16 @@ class OrderForm(forms.ModelForm):
         fields = ('wash_type', 'car')
 
 
-class OrderForm1(forms.Form):
-    pk = IntegerField()
+class CouponModelForm(forms.ModelForm):
+    class Meta:
+        model = Coupon
+        fields = '__all__'
+
+
+class OrderModelForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
 
 
 class ContactForm(forms.Form):

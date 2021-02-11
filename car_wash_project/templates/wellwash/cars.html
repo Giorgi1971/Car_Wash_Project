@@ -12,7 +12,7 @@
 
 <!-- მანქანების ძებნა ცხრილში-->
   <div class="row">
-    <form class="col s12" method="get" action=".">
+    <form class="col s12 m4 l4" method="get" action=".">
         {% csrf_token %}
         <div class="row">
             <div class="col s12">
@@ -25,10 +25,14 @@
             </div>
         </div>
     </form>
-  </div>
+      <div class="col s12 m4 l4" >
+          <br>
+          <br>
 
-    <button> <a href="{% url 'wellwash:add_car' 'add_car' %}" style="color: Red; font-family: Arial, Helvetica, sans-serif; padding: 50px; font-weight: bold; font-size:30;"> Add New Car</a></button>
+    <button> <a href="{% url 'wellwash:add_car' 'add_car' %}" style="color: Red; font-family: Arial, Helvetica, sans-serif; padding: 30px 50px; font-weight: bold; font-size:30px;"> Add New Car</a></button>
 <!-- მანქანების ცხრილი-->
+        </div>
+
 <hr>
 
     <table>

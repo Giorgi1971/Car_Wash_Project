@@ -44,30 +44,16 @@ def add_coupon(request: WSGIRequest, add: str):
 
 def coupon(request: WSGIRequest) -> HttpResponse:
     coupon_q = Q()
-    c1 = request.GET.get('coupon')
-    print('----')
-    if c1:
-        coupon_q &= Q(code__icontains=c1)
-        print(coupon_q)
-    coupons_list = Coupon.objects.filter(coupon_q)
+    q1 = request.GET.get('coupon')
+    if q1:
+        coupon_q &= Q(code__icontains=q1)
+    coupons_list = Coupon.objects.filter(coupon_q).order_by('-pk')
     paginator = Paginator(coupons_list, 25)  # Show 25 contacts per page.
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    coupon_form = CouponModelForm()
-
-    if request.method == 'POST':
-        print('GIO')
-        coupon_form = CouponModelForm(request.POST)
-        if coupon_form.is_valid():
-            coupon1: Coupon = coupon_form.save(commit=False)
-            coupon1.save()
-
-        return redirect('wash:washer-detail')
 
     context = {
-        'coupon_form': coupon_form,
-        'cars': coupons_list,
         'page_obj': page_obj,
     }
     return render(request=request, template_name='wellwash/coupons.html', context=context)
@@ -81,23 +67,6 @@ class CarView(generic.ListView):
     def get_queryset(self):
         """Return the last five published questions."""
         return CarModelForm
-
-
-def add_car(request: WSGIRequest, add: str):
-    car_add_form = CarModelForm()
-    print(request.POST)
-    if request.method == 'POST':
-        car_add_form = CarModelForm(request.POST)
-        if car_add_form.is_valid():
-            print('car form is valid')
-            car1: Car = car_add_form.save(commit=False)
-            car1.save()
-
-        return redirect('wellwash:car')
-
-    return render(request, template_name='wellwash/add.html', context={
-        'order_form': car_add_form
-    })
 
 
 def washers_list(request: WSGIRequest) -> HttpResponse:
@@ -189,7 +158,7 @@ def car(request: WSGIRequest):
     if q1:
         plate_q &= Q(licence_plate__icontains=q1)
         print(plate_q)
-    cars_list = Car.objects.filter(plate_q)
+    cars_list = Car.objects.filter(plate_q).order_by('-pk')
     paginator = Paginator(cars_list, 25)  # Show 25 contacts per page.
 
     page_number = request.GET.get('page')
@@ -205,17 +174,29 @@ def car(request: WSGIRequest):
     return render(request=request, template_name='wellwash/cars.html', context=context)
 
 
+def add_car(request: WSGIRequest, add: str):
+    car_add_form = CarModelForm()
+    print(request.POST)
+    if request.method == 'POST':
+        car_add_form = CarModelForm(request.POST)
+        if car_add_form.is_valid():
+            car1: Car = car_add_form.save(commit=False)
+            car1.save()
+            return redirect('wellwash:car')
+
+    return render(request, template_name='wellwash/add.html', context={
+        'order_form': car_add_form
+    })
+
+
 def add_order(request: WSGIRequest, add: str):
     order_form = OrderModelForm()
-    print('--mm-')
     if request.method == 'POST':
-        print('--POST MEtod--')
         order_form = OrderModelForm(request.POST)
-        print(request.POST)
         if order_form.is_valid():
-            print('--valided--')
             order1 = order_form.save(commit=False)
             order1.save()
+            return redirect('wellwash:order')
 
     return render(request, template_name='wellwash/add-order-form.html', context={
         'order_form': order_form
@@ -228,8 +209,8 @@ def order(request: WSGIRequest):
     if c1:
         order_q &= Q(car=c1)
         print(order_q)
-    order_list = Order.objects.filter(order_q)
-    paginator = Paginator(order_list, 12)  # Show 12 contacts per page.
+    order_list = Order.objects.filter(order_q).order_by('-pk')
+    paginator = Paginator(order_list, 5)  # Show 12 contacts per page.
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

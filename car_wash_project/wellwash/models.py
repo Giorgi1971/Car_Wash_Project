@@ -63,7 +63,7 @@ class Car(models.Model):
     licence_plate = models.CharField(max_length=24, default='CAR-000', unique=True)
 
     def __str__(self):
-        return f'{self.cars_model} : {self.licence_plate}'
+        return self.licence_plate
 
     def ct(self):
         pass
@@ -79,7 +79,7 @@ class WashType(models.Model):
 
 class Coupon(models.Model):
     code = models.PositiveSmallIntegerField(unique=True)
-    activate_date = models.DateTimeField(verbose_name="Activate date")
+    activate_date = models.DateTimeField(verbose_name="activate_date")
     discount = models.IntegerField(verbose_name=_('Discount'), help_text='%', default=20)
     validate = models.IntegerField(verbose_name=_('Validate period'), help_text='day', default=30)
     quantity = models.IntegerField(verbose_name=_('Quantity'), default=5)
@@ -120,9 +120,9 @@ class Order(models.Model):
     end_time = models.DateTimeField(verbose_name="End time", null=True)
 
     class StatusType(TextChoices):
-        ordered = 'oordered', _("Ordered")
-        process = 'pprocess', _("Process")
-        closed = 'cclosed', _("Closed")
+        ordered = 'ordered', _("Ordered")
+        process = 'process', _("Process")
+        closed = 'closed', _("Closed")
 
     status = models.CharField(max_length=24, choices=StatusType.choices, default=StatusType.ordered)
 

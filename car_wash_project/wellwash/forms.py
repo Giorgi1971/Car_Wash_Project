@@ -5,6 +5,14 @@ from user.models import User
 from .models import *
 
 
+class ExForm(forms.Form):
+    my_date_field = forms.DateField()
+
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
@@ -13,6 +21,7 @@ class OrderForm(forms.ModelForm):
 
 class CouponModelForm(forms.ModelForm):
     class Meta:
+        widgets = {'activate_date': DateInput()}
         model = Coupon
         fields = '__all__'
 

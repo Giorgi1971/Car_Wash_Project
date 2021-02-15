@@ -1,13 +1,9 @@
 {% block content %}
 
-
-<div style="padding: 20px 20px;">
 <form action="{% url 'wellwash:add_car' 'add_car' %}" method="post">
     {% csrf_token %}
     {{ order_form.as_p }}
     <input type="submit" value="Submit">
 </form>
-</div>
-
 
 {% endblock %}

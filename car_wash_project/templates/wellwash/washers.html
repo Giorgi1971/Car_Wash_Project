@@ -5,7 +5,7 @@
 <div class="container">
   <div class="row">
       <p> total washed count <strong>{{ total }}</strong></p>
-      <strong>Profit: {{ profit|default_if_none:0 }} ლარი </strong>
+      <strong>Profit: {{ profit|default_if_none:0.00 }} ლარი </strong>
   </div>
 
 
@@ -26,12 +26,12 @@
     </form>
   </div>
 
-<!-- აქედან იწყება მრეცხაბების სია სურათებით. -->
+<!-- აქედან იწყება მრეცხავების სია სურათებით. -->
 {% for washer in washers %}
-{% if forloop.counter0|divisibleby:4 %}
+{% if forloop.counter0|divisibleby:6 %}
 <div class="row">
 {% endif %}
-<div class="col s12 m3 l3">
+<div class="col s12 m2 l2">
   <div class="row">
 
     <div class="col s12">
@@ -50,7 +50,7 @@
     </div>
   </div>
 </div>
-{% if forloop.counter|divisibleby:4 or forloop.last %}
+{% if forloop.counter|divisibleby:6 or forloop.last %}
 </div>
 {% endif %}
 {% endfor %}

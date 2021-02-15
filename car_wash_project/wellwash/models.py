@@ -19,6 +19,12 @@ class Location(models.Model):
 class Branch(models.Model):
     title = models.CharField(max_length=255, verbose_name='Title', unique=True)
     location_id = models.OneToOneField(to='wellwash.Location', on_delete=models.PROTECT, related_name='branch')
+    image = models.ImageField(verbose_name=_("Image"), upload_to='profiles')
+    phone_number = models.CharField(max_length=50, verbose_name=_('Phone Number'))
+
+    class Meta:
+        verbose_name = _('Branch')
+        verbose_name_plural = _('Branches')
 
     def __str__(self):
         return self.title
@@ -27,6 +33,10 @@ class Branch(models.Model):
 class Box(models.Model):
     branch_id = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='boxes')
     box_code = models.CharField(max_length=12, unique=True)
+
+    class Meta:
+        verbose_name = _('Box')
+        verbose_name_plural = _('Boxes')
 
     class BoxStatus(models.TextChoices):
         FREE = 'F', _("Free")
@@ -61,6 +71,10 @@ class Car(models.Model):
     car_type = models.ForeignKey(to='CarType', on_delete=models.SET_NULL,
         null=True, related_name='car_car')
     licence_plate = models.CharField(max_length=24, default='CAR-000', unique=True)
+
+    class Meta:
+        verbose_name = _('Car')
+        verbose_name_plural = _('Cars')
 
     def __str__(self):
         return self.licence_plate
@@ -112,7 +126,7 @@ class Order(models.Model):
         to='WashType', related_name='orders',
         on_delete=models.PROTECT,
     )
-    box = models.ForeignKey(Box, on_delete=models.PROTECT, related_name='orders')
+    box = models.ForeignKey(to='Box', on_delete=models.PROTECT, related_name='orders')
     my_wash_price = models.DecimalField(max_digits=4, decimal_places=2, verbose_name=_("Price"))
 
     order_time = models.DateTimeField(verbose_name="Order time", auto_now_add=True)

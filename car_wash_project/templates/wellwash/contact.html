@@ -4,7 +4,7 @@
 
 
 <div style="padding:0 20px">
-<form action="{% url 'wellwash:contact' %}" method="post">
+<form action="." method="post">
     {% csrf_token %}
     {{ contact_form.as_p }}
     <input type="submit" value="Submit">

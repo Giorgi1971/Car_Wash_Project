@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from .forms import ContactForm
+from .forms import *
 from django.core.mail import send_mail
 
 
@@ -36,3 +36,9 @@ def contact_us(request):
             'contact_form': form
         })
 
+
+def staff(request):
+    form = UserModelForms()
+    return render(request, template_name='user/staff.html', context={
+            'form': form
+        })

@@ -1,14 +1,17 @@
+<div style="padding= 20px;">
   <nav>
     <div class="nav-wrapper">
       <a href="{% url 'admin:index' %}" class="brand-logo right">Admin</a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
-        <li><a href="{% url 'wellwash:index' %}">Welcome</a></li>
-        <li><a href="{% url 'wellwash:washers' %}">Washers</a></li>
-        <li><a href="{% url 'wellwash:coupon' %}">Coupons</a></li>
+        <li><a href="{% url 'wellwash:index' %}">Home</a></li>
+        <li><a href="{% url 'wellwash:branch' %}">Branches</a></li>
         <li><a href="{% url 'wellwash:car' %}">Cars</a></li>
+        <li><a href="{% url 'wellwash:washer' %}">Washers</a></li>
+        <li><a href="{% url 'wellwash:coupon' %}">Coupons</a></li>
         <li><a href="{% url 'wellwash:order' %}">Orders</a></li>
-        <li><a href="{% url 'wellwash:contact' %}">Contact</a></li>
+        <li><a href="{% url 'wellwash:order_list' %}">Order_list</a></li>
         <li><a href="{% url 'user:contact_us' %}">Contact Us</a></li>
       </ul>
     </div>
   </nav>
+</div>

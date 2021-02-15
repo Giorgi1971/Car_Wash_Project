@@ -4,7 +4,7 @@
 
 
 
-<!-- აქედან იწყება პლაგინაცია -->
+<!-- აქედან იწყება პაგინაცია -->
 
 
 <div style="padding:0 20px">
@@ -13,7 +13,6 @@
 <!-- მანქანების ძებნა ცხრილში-->
   <div class="row">
     <form class="col s12 m4 l4" method="get" action=".">
-        {% csrf_token %}
         <div class="row">
             <div class="col s12">
                 <div class="input-field inline">
@@ -29,7 +28,12 @@
           <br>
           <br>
 
-    <button> <a href="{% url 'wellwash:add_car' 'add_car' %}" style="color: Red; font-family: Arial, Helvetica, sans-serif; padding: 30px 50px; font-weight: bold; font-size:30px;"> Add New Car</a></button>
+    <button>
+        <a href="{% url 'wellwash:add_car' 'add_car' %}"
+           style="color: Red; font-family: Arial, Helvetica, sans-serif; padding: 30px 50px; font-weight: bold; font-size:30px;">
+            Add New Car
+        </a>
+    </button>
 <!-- მანქანების ცხრილი-->
         </div>
 
@@ -49,7 +53,6 @@
 
 
 {% for car in page_obj %}
-    {# Each "contact" is a Contact model object. #}
     <table>
 
         <tbody>
@@ -83,7 +86,7 @@
 </div>
 
 </div>
-
+</div>
 
 
 {% endblock %}

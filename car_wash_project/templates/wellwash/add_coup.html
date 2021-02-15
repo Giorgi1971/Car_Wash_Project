@@ -1,16 +1,9 @@
 {% block content %}
 
-
-<div style="padding:20px">
-
 <form action="{% url 'wellwash:add_coupon' 'add_coupon' %}" method="post">
-
     {% csrf_token %}
     {{ form.as_p }}
-
-    <button type="submit">რეცხვის შეკვეთა</button>
-
+    <button type="submit">კუპონის შეძენა</button>
 </form>
-</div>
 
 {% endblock %}

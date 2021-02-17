@@ -48,11 +48,11 @@ class User(AbstractUser):
     birthdate = models.DateField(verbose_name=_('Birth Date'), )
     image = models.ImageField(verbose_name=_("Image"), upload_to='profiles')
     salary = models.DecimalField(
-        max_digits=8, decimal_places=2,
+        max_digits=8, decimal_places=2, null=True,
         verbose_name=_('Salary'), help_text='in Lari / % (if being washer )'  # @TODO: Optimize
     )
     phone_number = models.CharField(max_length=50, verbose_name=_('Phone Number'))
-    hire_date = models.DateField()
+    hire_date = models.DateField(null=True)
 
     class Status(IntegerChoices):
         customer = 1, _("Customer")

@@ -157,12 +157,12 @@ def branch(request: WSGIRequest) -> HttpResponse:
 
 def branch_detail(request: WSGIRequest, pk: int) -> HttpResponse:
     branch1: User = get_object_or_404(
-        Branch.objects.filter(),
+        Branch.objects.all(),
         pk=pk
     )
     now = timezone.now()
     branch_salary_info: Dict[str, Optional[Decimal]] = branch1.boxes.annotate(
-        # box_count=Count('orders')).annotate(
+
         earned_per_order=Sum('orders__my_wash_price')).aggregate(
         earned_money_year=Sum(
             'earned_per_order',
@@ -189,9 +189,19 @@ def branch_detail(request: WSGIRequest, pk: int) -> HttpResponse:
             filter=Q(orders__end_time__gte=now - timezone.timedelta(days=7))
         )
     )
+    bbb = branch1.boxes.annotate(nn=Count('id'))
+    print(bbb)
+    tt = Branch.objects.annotate(
+        branch_boxes=Count('boxes')
+    )
+    print('---')
+    n = tt.filter(id=pk)[0]
+    print(n.branch_boxes)
 
     return render(request, template_name='wellwash/branch_detail.html', context={
         'branch': branch1,
+        'br': tt.filter(id=pk),
+        'bbb': bbb,
         **branch_salary_info,
     })
 
@@ -234,6 +244,24 @@ def add_car(request: WSGIRequest, add: str):
 
     return render(request, template_name='wellwash/add.html', context={
         'order_form': car_add_form
+    })
+
+
+def make_order(request: WSGIRequest, pk: int):
+    order_form = OrderModelForm()
+    pk = request.POST.get('pk')
+    if request.method == 'POST':
+        order_form = OrderModelForm(request.POST)
+        if order_form.is_valid():
+            order1: Order = order_form.save(commit=False)
+            order1.employee_id = pk
+            order1.start_time = timezone.now()
+            order1.save()
+
+        return redirect('wellwash:index')
+
+    return render(request, template_name='wellwash/save_form.html', context={
+        'contact_form': order_form
     })
 
 
@@ -280,21 +308,3 @@ def order(request: WSGIRequest):
     }
 
     return render(request=request, template_name='wellwash/orders.html', context=context)
-
-
-def make_order(request: WSGIRequest, pk: int):
-    order_form = OrderModelForm()
-    pk = request.POST.get('pk')
-    if request.method == 'POST':
-        order_form = OrderModelForm(request.POST)
-        if order_form.is_valid():
-            order1: Order = order_form.save(commit=False)
-            order1.employee_id = pk
-            order1.start_time = timezone.now()
-            order1.save()
-
-        return redirect('wellwash:index')
-
-    return render(request, template_name='wellwash/save_form.html', context={
-        'contact_form': order_form
-    })

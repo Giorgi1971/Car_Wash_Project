@@ -14,13 +14,15 @@
                 <div class="card-content">
                     <p> {{ branch.title }}</p>
                     <p>We have - {{ branch.box_count }} boxes </p>
+                    <p>We have - {{ bbb }} boxes </p>
+                    <p>- {{ br.branch_boxes }} boxes </p>
                 </div>
                 {#                <div class="card-action">#}
                 {#                    <a href="#">Read More</a>#}
                 {#                </div>#}
             </div>
         </div>
-        <div class="col s12 m7">
+        <div class="col s12 m6">
             <div class="row">
                 <ul class="col s12 collapsible">
                     <li>
@@ -29,7 +31,7 @@
                             Week
                             <span class="new badge">1</span></div>
                         <div class="collapsible-body">
-                            <p>Earned: - {{ earned_money_week | default_if_none:0 | floatformat:2  }}</p>
+                            <p>Earned: {{ earned_money_week | default_if_none:0 | floatformat:2  }}</p>
                             <p>Count: {{ washed_last_week }}</p>
 
                         </div>
@@ -83,7 +85,9 @@
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <a href="{% url 'wellwash:add_car' 'add_car' %}">add Order</a>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var elems = document.querySelectorAll('.collapsible');

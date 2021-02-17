@@ -33,7 +33,7 @@
                             Week
                             <span class="new badge">1</span></div>
                         <div class="collapsible-body">
-                            <p>Earned: {{ earned_money_week }}</p>
+                            <p>Earned: {{ earned_money_week | default_if_none:0 | floatformat:2 }}</p>
                             <p>Count: {{ washed_last_week }}</p>
 
                         </div>
@@ -44,7 +44,7 @@
                             Month
                             <span class="badge">1</span></div>
                         <div class="collapsible-body">
-                            <p>Earned: {{ earned_money_month }}</p>
+                            <p>Earned: {{ earned_money_month | default_if_none:0 | floatformat:2 }}</p>
                             <p>Count: {{ washed_last_month }}</p>
                         </div>
                     </li>
@@ -54,7 +54,7 @@
                             Year
                             <span class="badge">1</span></div>
                         <div class="collapsible-body">
-                            <p>Earned: {{ earned_money_year }}</p>
+                            <p>Earned: {{ earned_money_year | default_if_none:0 | floatformat:2 }}</p>
                             <p>Count: {{ washed_last_year }}</p>
                         </div>
                     </li>

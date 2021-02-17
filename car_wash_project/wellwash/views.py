@@ -1,6 +1,5 @@
 from decimal import Decimal
 from typing import Dict, Optional
-from user.models import User
 from django.core.paginator import Paginator
 from django.shortcuts import render
 
@@ -157,76 +156,44 @@ def branch(request: WSGIRequest) -> HttpResponse:
 
 
 def branch_detail(request: WSGIRequest, pk: int) -> HttpResponse:
-    branch_m: Branch = get_object_or_404(
-        Branch.objects.all(),
+    branch1: User = get_object_or_404(
+        Branch.objects.filter(),
         pk=pk
     )
-    print(pk)
-    print(branch_m.pk)
-    print(branch_m)
-    print(branch_m.boxes.all())
-    b_count = Branch.objects.annotate(box_count=Count('boxes'))
-    print('-----')
-    print(b_count)
-    print('-----')
-    print(b_count[0])
-    bcc = Branch.objects.annotate(count_orders=Count('boxes__orders'))
-    print(bcc[2].count_orders)
-    bb = Branch.objects.annotate(sum_boxes=Sum('boxes__orders__my_wash_price'))
-    print(bb)
-    print('--')
-    earned_money_q = ExpressionWrapper(
-        F('my_wash_price') * 1,
-        output_field=DecimalField()
+    now = timezone.now()
+    branch_salary_info: Dict[str, Optional[Decimal]] = branch1.boxes.annotate(
+        # box_count=Count('orders')).annotate(
+        earned_per_order=Sum('orders__my_wash_price')).aggregate(
+        earned_money_year=Sum(
+            'earned_per_order',
+            filter=Q(orders__end_time__gte=now - timezone.timedelta(days=365))
+        ),
+        washed_last_year=Count(
+            'id',
+            filter=Q(orders__end_time__gte=now - timezone.timedelta(days=365))
+        ),
+        earned_money_month=Sum(
+            'earned_per_order',
+            filter=Q(orders__end_time__gte=now - timezone.timedelta(weeks=4))
+        ),
+        washed_last_month=Count(
+            'id',
+            filter=Q(orders__end_time__gte=now - timezone.timedelta(weeks=4))
+        ),
+        earned_money_week=Sum(
+            'earned_per_order',
+            filter=Q(orders__end_time__gte=now - timezone.timedelta(days=7))
+        ),
+        washed_last_week=Count(
+            'id',
+            filter=Q(orders__end_time__gte=now - timezone.timedelta(days=7))
+        )
     )
-    earned_money_q = ExpressionWrapper(
-        F('my_wash_price') * 1,
-        output_field=DecimalField()
-    )
-    info = {'i': 'f'}
-    # now = timezone.now()
-    # washer_salary_info: Dict[str, Optional[Decimal]] = Branch.objects.annotate(anot=Sum('boxes__orders__my_wash_price')) \
-    #     .annotate(earned_per_order=earned_money_q) \
-    #     .aggregate(
-    #     earned_money_year=Sum(
-    #         'earned_per_order',
-    #         filter=Q(end_time__gte=now - timezone.timedelta(days=365))
-    #     ),
-    #     washed_last_year=Count(
-    #         'id',
-    #         filter=Q(end_time__gte=now - timezone.timedelta(days=365))
-    #     ),
-    #     earned_money_month=Sum(
-    #         'earned_per_order',
-    #         filter=Q(end_time__gte=now - timezone.timedelta(weeks=4))
-    #     ),
-    #     washed_last_month=Count(
-    #         'id',
-    #         filter=Q(end_time__gte=now - timezone.timedelta(weeks=4))
-    #     ),
-    #     earned_money_week=Sum(
-    #         'earned_per_order',
-    #         filter=Q(end_time__gte=now - timezone.timedelta(days=7))
-    #     ),
-    #     washed_last_week=Count(
-    #         'id',
-    #         filter=Q(end_time__gte=now - timezone.timedelta(days=7))
-    #     )
-    # )
 
     return render(request, template_name='wellwash/branch_detail.html', context={
-        'info': info,
-        # **washer_salary_info
+        'branch': branch1,
+        **branch_salary_info,
     })
-# -------------------------------------
-
-    # cn = one_branch.boxes.annotate(Count('box_code'))
-    #
-    # return render(request, template_name='wellwash/branch_detail.html', context={
-    #     'branch': one_branch,
-    #     'cn': cn
-    #     # **washer_salary_info
-    # })
 
 
 def order_list(request: WSGIRequest):
@@ -246,15 +213,10 @@ def car(request: WSGIRequest):
     if q1:
         plate_q &= Q(licence_plate__icontains=q1)
     cars_list = Car.objects.filter(plate_q).order_by('-pk')
-    paginator = Paginator(cars_list, 25)  # Show 25 contacts per page.
-
+    paginator = Paginator(cars_list, 7)  # Show 25 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    # if request.POST:
-    #     return render(request, 'wellwash/cars.html', {'page_obj': page_obj})
-
     context = {
-        'cars': Car.objects.filter(plate_q),
         'page_obj': page_obj,
     }
     return render(request=request, template_name='wellwash/cars.html', context=context)

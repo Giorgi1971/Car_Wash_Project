@@ -1,23 +1,19 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <hr>
 
 <h4 style="padding: 0 30px; color: rgb(180,30,30); font-weight: bold;"> Choose best Place for You.</h4>
 
-
-
   <hr>
 <div style="padding: 0 30px;">
 
-  <!-- აქედან იწყება მრეცხავების სია სურათებით. -->
+  <!-- აქედან იწყება მრეცხავების სია სურათებით -->
 {% for branch in branches %}
 {% if forloop.counter0|divisibleby:4 %}
 <div class="row">
 {% endif %}
 <div class="col s12 m3 l3">
   <div class="row">
-
     <div class="col s12">
       <div class="card">
         <div class="card-image">
@@ -29,7 +25,7 @@
           <p><b>Location:</b> {{ branch.location_id.street_address }}.</p>
           <p><b>Phone:</b> {{ branch.phone_number }}.</p>
           <p><b>{{ branch.title }} have {{ branch.branch_boxes }} boxes.</b></p>
-          <p><b>Earned - {{ branch.mm | floatformat:2 }} GEL.</b></p>
+          <p><b>Earned - {{ branch.mm | default_if_none:0 | floatformat:2 }} GEL.</b></p>
         </div>
         <div class="card-action">
           <a href="{% url 'wellwash:branch_detail' branch.pk %}" style="color: rgb(180,30,30); font-weight: bold;">Detail-Page</a>

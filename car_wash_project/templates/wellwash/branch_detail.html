@@ -8,13 +8,12 @@
                 <div class="card-image">
                     <img src="{{ branch.image.url }}">
                     {% if branch.title %}
-                        <span class="card-title">{{ branch.title }}</span>
+                        <span class="card-title"><b>{{ branch.title }}</b></span>
                     {% endif %}
                 </div>
                 <div class="card-content">
                     <p> {{ branch.title }}</p>
-                    <p> {{ cn }}</p>
-                    <p>I have washed {{ branch.box_count }}</p>
+                    <p>We have - {{ branch.box_count }} boxes </p>
                 </div>
                 {#                <div class="card-action">#}
                 {#                    <a href="#">Read More</a>#}
@@ -30,7 +29,7 @@
                             Week
                             <span class="new badge">1</span></div>
                         <div class="collapsible-body">
-                            <p>Earned: {{ earned_money_week }}</p>
+                            <p>Earned: - {{ earned_money_week | default_if_none:0 | floatformat:2  }}</p>
                             <p>Count: {{ washed_last_week }}</p>
 
                         </div>
@@ -41,7 +40,7 @@
                             Month
                             <span class="badge">1</span></div>
                         <div class="collapsible-body">
-                            <p>Earned: {{ earned_money_month }}</p>
+                            <p>Earned: {{ earned_money_month | default_if_none:0 | floatformat:2 }}</p>
                             <p>Count: {{ washed_last_month }}</p>
                         </div>
                     </li>
@@ -51,7 +50,7 @@
                             Year
                             <span class="badge">1</span></div>
                         <div class="collapsible-body">
-                            <p>Earned: {{ earned_money_year }}</p>
+                            <p>Earned: {{ earned_money_year| default_if_none:0 | floatformat:2 }}</p>
                             <p>Count: {{ washed_last_year }}</p>
                         </div>
                     </li>
@@ -70,9 +69,7 @@
                         </div>
                     </div>
 
-
                     {#This is Car Choice#}
-
 
                     <div class="row">
                         <div class="col s12 center">

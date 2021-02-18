@@ -5,6 +5,7 @@ from .choices import *
 from django.db.models import IntegerChoices, TextChoices
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from user.models import User
 
 
 class Location(models.Model):
@@ -92,6 +93,7 @@ class WashType(models.Model):
 
 
 class Coupon(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='user_coupon', default=12)
     code = models.PositiveSmallIntegerField(unique=True)
     activate_date = models.DateTimeField(verbose_name="activate_date")
     discount = models.IntegerField(verbose_name=_('Discount'), help_text='%', default=20)
@@ -116,7 +118,7 @@ class Order(models.Model):
     car = models.ForeignKey(to='Car', on_delete=models.PROTECT, related_name='orders')
 
     employee = models.ForeignKey(
-        to='user.User', on_delete=models.SET_NULL, null=True, related_name='orders')
+        to='user.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
     coupon = models.ForeignKey(
         to='Coupon', related_name='orders',
         on_delete=models.PROTECT,
@@ -126,12 +128,12 @@ class Order(models.Model):
         to='WashType', related_name='orders',
         on_delete=models.PROTECT,
     )
-    box = models.ForeignKey(to='Box', on_delete=models.PROTECT, related_name='orders')
-    my_wash_price = models.DecimalField(max_digits=4, decimal_places=2, verbose_name=_("Price"))
+    box = models.ForeignKey(to='Box', on_delete=models.PROTECT, null=True, blank=True, related_name='orders')
+    my_wash_price = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True, verbose_name=_("Price"))
 
     order_time = models.DateTimeField(verbose_name="Order time", auto_now_add=True)
-    start_time = models.DateTimeField(verbose_name="Begin time", null=True)
-    end_time = models.DateTimeField(verbose_name="End time", null=True)
+    start_time = models.DateTimeField(verbose_name="Begin time")
+    end_time = models.DateTimeField(verbose_name="End time", null=True, blank=True)
 
     class StatusType(TextChoices):
         ordered = 'ordered', _("Ordered")

@@ -8,8 +8,6 @@ from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count, Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-
-# @TODO: Add Manager Method For Washer Listing
 from django.views import generic
 
 from .forms import *
@@ -162,7 +160,6 @@ def branch_detail(request: WSGIRequest, pk: int) -> HttpResponse:
     )
     now = timezone.now()
     branch_salary_info: Dict[str, Optional[Decimal]] = branch1.boxes.annotate(
-
         earned_per_order=Sum('orders__my_wash_price')).aggregate(
         earned_money_year=Sum(
             'earned_per_order',
@@ -189,19 +186,26 @@ def branch_detail(request: WSGIRequest, pk: int) -> HttpResponse:
             filter=Q(orders__end_time__gte=now - timezone.timedelta(days=7))
         )
     )
-    bbb = branch1.boxes.annotate(nn=Count('id'))
-    print(bbb)
-    tt = Branch.objects.annotate(
-        branch_boxes=Count('boxes')
-    )
-    print('---')
-    n = tt.filter(id=pk)[0]
-    print(n.branch_boxes)
+    print(branch1.boxes.count())
+    bbb = branch1.boxes.count()
+    print(request.user.id)
+    free_boxes = branch1.boxes.filter(box_status='F').count()
+    print(free_boxes)
+    print('-----------')
+    username = None
+    if request.user.is_authenticated:
+        print(request.user)
+        username = request.user
+    form = OrderModelForm1()
+    if request.method == 'POST':
+        OrderModelForm1(request.POST)
 
     return render(request, template_name='wellwash/branch_detail.html', context={
+        'username': username,
         'branch': branch1,
-        'br': tt.filter(id=pk),
+        'form': form,
         'bbb': bbb,
+        'free_boxes': free_boxes,
         **branch_salary_info,
     })
 
@@ -248,10 +252,10 @@ def add_car(request: WSGIRequest, add: str):
 
 
 def make_order(request: WSGIRequest, pk: int):
-    order_form = OrderModelForm()
+    order_form = OrderModelForm2()
     pk = request.POST.get('pk')
     if request.method == 'POST':
-        order_form = OrderModelForm(request.POST)
+        order_form = OrderModelForm2(request.POST)
         if order_form.is_valid():
             order1: Order = order_form.save(commit=False)
             order1.employee_id = pk
@@ -266,9 +270,9 @@ def make_order(request: WSGIRequest, pk: int):
 
 
 def add_order(request: WSGIRequest, add: str):
-    order_form = OrderModelForm()
+    order_form = OrderModelForm2()
     if request.method == 'POST':
-        order_form = OrderModelForm(request.POST)
+        order_form = OrderModelForm2(request.POST)
         if order_form.is_valid():
             order1 = order_form.save(commit=False)
             order1.save()
@@ -290,7 +294,7 @@ def order(request: WSGIRequest):
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    order_form = OrderModelForm()
+    order_form = OrderModelForm2()
 
     # if request.method == 'POST':
     #     print('POST')

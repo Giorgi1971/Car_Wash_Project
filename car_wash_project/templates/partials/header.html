@@ -14,7 +14,7 @@
       </ul>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         {% if user.is_authenticated %}
-        <li style="color: rgb(100,30,30); font-weight: bold; text-shadow: 0 0 3px #ffffff;"><span>{{ user.email }}</span></li>
+        <li><strong>{{ user.email }}</strong></li>
         <li>
           <form action="{% url 'user:user_logout' %}" method="POST">
             {% csrf_token %}

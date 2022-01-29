@@ -8,8 +8,6 @@ from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count, Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-
-# @TODO: Add Manager Method For Washer Listing
 from django.views import generic
 
 from .forms import *
@@ -156,7 +154,6 @@ def branch_detail(request: WSGIRequest, pk: int) -> HttpResponse:
     branch1 = get_object_or_404(Branch, pk=pk)
     now = timezone.now()
     branch_salary_info: Dict[str, Optional[Decimal]] = branch1.boxes.annotate(
-
         earned_per_order=Sum('orders__my_wash_price')).aggregate(
         earned_money_year=Sum(
             'earned_per_order',
@@ -237,10 +234,10 @@ def add_car(request: WSGIRequest, add: str):
 
 
 def make_order(request: WSGIRequest, pk: int):
-    order_form = OrderModelForm()
+    order_form = OrderModelForm2()
     pk = request.POST.get('pk')
     if request.method == 'POST':
-        order_form = OrderModelForm(request.POST)
+        order_form = OrderModelForm2(request.POST)
         if order_form.is_valid():
             order1: Order = order_form.save(commit=False)
             order1.employee_id = pk
@@ -255,9 +252,9 @@ def make_order(request: WSGIRequest, pk: int):
 
 
 def add_order(request: WSGIRequest, add: str):
-    order_form = OrderModelForm()
+    order_form = OrderModelForm2()
     if request.method == 'POST':
-        order_form = OrderModelForm(request.POST)
+        order_form = OrderModelForm2(request.POST)
         if order_form.is_valid():
             order1 = order_form.save(commit=False)
             order1.save()
@@ -279,7 +276,7 @@ def order(request: WSGIRequest):
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    order_form = OrderModelForm()
+    order_form = OrderModelForm2()
 
     # if request.method == 'POST':
     #     print('POST')

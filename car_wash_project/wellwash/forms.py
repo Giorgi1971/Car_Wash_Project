@@ -21,7 +21,14 @@ class CouponModelForm(forms.ModelForm):
         fields = '__all__'
 
 
-class OrderModelForm(forms.ModelForm):
+class OrderModelForm1(forms.ModelForm):
+    class Meta:
+        widgets = {'end_time': DateTimeInput(), 'start_time': DateTimeInput()}
+        model = Order
+        fields = ('car', 'coupon', 'wash_type', 'start_time')
+
+
+class OrderModelForm2(forms.ModelForm):
     class Meta:
         widgets = {'end_time': DateTimeInput(), 'start_time': DateTimeInput(),}
         model = Order

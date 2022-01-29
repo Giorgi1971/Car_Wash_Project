@@ -80,11 +80,8 @@ def user_login(request):
         if form.is_valid():
             login(request, form.get_user())
             return redirect('wellwash:branch')
-
-    form = AuthenticationForm()
-    return render(
-        request,
-        'user/login.html',
+    # form = AuthenticationForm()
+    return render(request, 'user/login.html',
         context={
             'form': form
         }

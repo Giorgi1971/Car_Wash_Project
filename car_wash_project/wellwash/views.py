@@ -149,17 +149,11 @@ def branch(request: WSGIRequest) -> HttpResponse:
     context = {
         'branches': order_info.order_by('pk'),
     }
-    print(order_info)
-    print(order_info[2])
-    print(order_info[2].mm)
     return render(request=request, template_name='wellwash/branches.html', context=context)
 
 
 def branch_detail(request: WSGIRequest, pk: int) -> HttpResponse:
-    branch1: User = get_object_or_404(
-        Branch.objects.all(),
-        pk=pk
-    )
+    branch1 = get_object_or_404(Branch, pk=pk)
     now = timezone.now()
     branch_salary_info: Dict[str, Optional[Decimal]] = branch1.boxes.annotate(
 
@@ -190,17 +184,12 @@ def branch_detail(request: WSGIRequest, pk: int) -> HttpResponse:
         )
     )
     bbb = branch1.boxes.annotate(nn=Count('id'))
-    print(bbb)
-    tt = Branch.objects.annotate(
-        branch_boxes=Count('boxes')
-    )
-    print('---')
+    tt = Branch.objects.annotate(branch_boxes=Count('boxes'))
     n = tt.filter(id=pk)[0]
-    print(n.branch_boxes)
 
     return render(request, template_name='wellwash/branch_detail.html', context={
         'branch': branch1,
-        'br': tt.filter(id=pk),
+        'br': tt.filter(id=pk)[0],
         'bbb': bbb,
         **branch_salary_info,
     })

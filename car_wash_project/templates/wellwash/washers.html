@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
+
 <div class="container">
   <div class="row">
       <p> total washed count <strong>{{ total }}</strong></p>
       <strong>Profit: {{ profit|default_if_none:0.00 }} ლარი </strong>
   </div>
-
 
   <div class="row">
     <form class="col s12" method="get" action=".">
@@ -37,10 +36,12 @@
     <div class="col s12">
       <div class="card">
         <div class="card-image">
+
           <img src="{{ washer.image.url }}" style="height: 180px;">
           <span class="card-title">{{ washer.get_full_name}}</span>
         </div>
         <div class="card-content">
+          <p>{{ washer.image.url }}</p>
           <p>I am washed {{ washer.washed_count }} car!</p>
         </div>
         <div class="card-action">

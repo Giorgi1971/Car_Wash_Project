@@ -8,6 +8,8 @@ urlpatterns = [
     path('', index, name='index'),
 
     path('branches/', branch, name='branch'),
+    path('branch_list/', branch_list, name='branch_list'),
+    path('branch_list_view/', BranchListView.as_view(), name='branch_list_view'),
     path('branches/<int:pk>/', branch_detail, name='branch_detail'),
 
     path('washers/', washers_list, name='washer'),

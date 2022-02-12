@@ -30,7 +30,6 @@
                     <div class="collapsible-body">
                         <p>Earned: {{ earned_money_week | default_if_none:0 | floatformat:2 }}</p>
                         <p>Count: {{ washed_last_week }}</p>
-
                     </div>
                 </li>
                 <li class="active">
@@ -57,8 +56,6 @@
                 </li>
             </ul>
         </div>
-
-
         <div class="row">
             <form action="." method="post">
                 {% csrf_token %}

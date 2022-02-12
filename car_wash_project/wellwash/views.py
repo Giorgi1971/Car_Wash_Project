@@ -1,4 +1,6 @@
 from decimal import Decimal
+from django.views.generic.list import ListView
+from pyexpat import model
 from typing import Dict, Optional
 from django.core.paginator import Paginator
 from django.shortcuts import render
@@ -17,7 +19,6 @@ from .models import *
 # @TODO: Add Manager Method For Washer Listing
 
 def index(request: WSGIRequest) -> HttpResponse:
-    print('Giorgi')
     # if request.method == 'POST':
     return render(request=request, template_name='wellwash/index.html')
 
@@ -138,12 +139,32 @@ def washer_detail(request: WSGIRequest, pk: int) -> HttpResponse:
     })
 
 
+class BranchListView(ListView):
+    model = Branch
+
+    def get_queryset(self):
+        branch_list = Branch.objects.annotate(
+        all_price=Sum('boxes__orders__my_wash_price')
+        ).order_by('pk')
+        return branch_list
+
+
+def branch_list(request):
+    branches = Branch.objects.annotate(
+        all_price=Sum('boxes__orders__my_wash_price')
+    )
+    context = {'branch_list':branches.order_by('pk'),}
+    return render(request=request, template_name='wellwash/branch_list.html', context=context)
+
+
 def branch(request: WSGIRequest) -> HttpResponse:
+    b_l = Branch.objects.all()
     order_info: Dict[str, Optional[Decimal]] = Branch.objects.annotate(
-        branch_boxes=Count('boxes')
+        branch_boxes=Count('boxes__box_code')
     ).annotate(
         mm=Sum('boxes__orders__my_wash_price')
     )
+    print(type(order_info))
     context = {
         'branches': order_info.order_by('pk'),
     }
@@ -212,6 +233,7 @@ def car(request: WSGIRequest):
     paginator = Paginator(cars_list, 7)  # Show 25 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    # mod = cars_list[0].cars_model.label
     context = {
         'page_obj': page_obj,
     }

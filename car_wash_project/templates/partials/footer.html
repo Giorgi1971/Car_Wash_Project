@@ -16,6 +16,9 @@
         {% if user.is_authenticated %}
         <li style="color: rgb(100,30,30); font-weight: bold; text-shadow: 0 0 3px #ffffff;"><span>{{ user.email }}</span></li>
         <li>
+          <a href="{% url 'user:user_logout' %}">Log-out</a>
+          </li>
+          <li>
           <form action="{% url 'user:user_logout' %}" method="POST">
             {% csrf_token %}
             <div class="row">
